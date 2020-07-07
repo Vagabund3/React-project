@@ -6,8 +6,6 @@ import {
   updateNewPostTextActionCreator,
 } from "../../../Redux/Profile-reducer";
 
-
-
 //компонента должна получать данные и callback
 const MyPosts = (props) => {
   let postsElements = props.posts.map((p) => (
@@ -32,7 +30,7 @@ const MyPosts = (props) => {
 
   return (
     <div className={s.postsBlock}>
-      <h3>My posts </h3>
+      <h3>My posts ggfgfgfgfg </h3>
       <div>
         <div>
           <textarea
