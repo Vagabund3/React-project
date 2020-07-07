@@ -30,7 +30,7 @@ const MyPosts = (props) => {
 
   return (
     <div className={s.postsBlock}>
-      <h3>My posts ggfgfgfgfg </h3>
+      <h3>My posts</h3>
       <div>
         <div>
           <textarea
