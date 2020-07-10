@@ -8,7 +8,7 @@ import {
 } from "../../Redux/Dialogs-reducer";
 
 const Dialogs = (props) => {
-  let state = props.store.getState().dialogsPage;
+  let state = props.dialogsPage;
 
   let dialogsElements = state.dialogs.map((d) => (
     <DialogItem name={d.name} id={d.id} />
@@ -18,16 +18,15 @@ const Dialogs = (props) => {
     <Message message={m.message} />
   ));
   let newMessageBody = state.newMessageBody;
-
+    //хотим сообщить что мы нажали кнопку,значит нужно отправить сообщение
   let onSendMessageClick = () => {
-    props.store.dispatch(sendMessageCreator());
+    ;
+    props.sendMessage();
   };
 
   let onNewMessageChange = (e) => {
-    //textarea помещает сюда объект-событие (event)
-    //c помощью (е) можно достучаться до объекта с которым произошло событие, с помощью-см. ниже
     let body = e.target.value;
-    props.store.dispatch(updateNewMessageBodyCreator(body));
+     props.updateNewMessageBody(body);
   };
 
   return (

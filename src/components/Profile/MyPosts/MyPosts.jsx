@@ -1,31 +1,25 @@
 import React from "react";
 import s from "./MyPosts.module.css";
 import Post from "./Post/Post";
-import {
-  addPostActionCreator,
-  updateNewPostTextActionCreator,
-} from "../../../Redux/Profile-reducer";
 
-//компонента должна получать данные и callback
+
+//компонента должна получать данные и callbackИ
 const MyPosts = (props) => {
   let postsElements = props.posts.map((p) => (
     <Post message={p.message} likesCount={p.likesCount} />
   ));
-
   let newPostElement = React.createRef();
 
-  let addPost = () => {
-    //props.addPost();
-    props.dispatch(addPostActionCreator());
+  // onPostChange и onAddPost это callbackИ
+  //этот addPost идет на onClick,который находиться ниже
+  let onAddPost = () => {
+    props.addPost();
   };
 
   let onPostChange = () => {
     let text = newPostElement.current.value;
-    //props.updateNewPostText(text);
-    //  let action = { type: "UPDATE-NEW-POST-TEXT", newText: text };
-
-    let action = updateNewPostTextActionCreator(text);
-    props.dispatch(action);
+    //вызываем из пропсов и передаем внутрь текст в MyPostsContainer.jsx
+    props.updateNewPostText(text);
   };
 
   return (
@@ -40,7 +34,8 @@ const MyPosts = (props) => {
           />
         </div>
         <div>
-          <button onClick={addPost}>Add post</button>
+          {/* когда происходит onClick вызывается функция addPost из пропсов, см выше */}
+          <button onClick={onAddPost}>Add post</button>
         </div>
       </div>
       <div className={s.posts}>{postsElements}</div>
@@ -49,3 +44,6 @@ const MyPosts = (props) => {
 };
 
 export default MyPosts;
+
+//если не понимаешь то включи 44 ролик с 25 минуты
+ 

@@ -8,6 +8,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import News from "./components/News/News";
 import Video from "./components/Video/Video";
 import Settings from "./components/Settings/Settings";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
 
 const App = (props) => {
   return (
@@ -15,19 +16,11 @@ const App = (props) => {
       <Header />
       <Navbar />
       <div className="app-wrapper-content">
-        <Route
-          path="/profile"
-          render={() => (
-            <Profile
-              profilePage={props.state.profilePage}
-              dispatch={props.dispatch}
-            />
-          )}
-        />
+        <Route path="/profile" render={() => <Profile store={props.store} />} />
 
         <Route //следит за url,смотрит на адресную строку
           path="/dialogs"
-          render={() => <Dialogs store={props.store} />}
+          render={() => <DialogsContainer store={props.store} />}
         />
 
         <Route path="/news" render={() => <News />} />
