@@ -4,33 +4,40 @@ import {
   updateNewPostTextActionCreator,
 } from "../../../Redux/Profile-reducer";
 import MyPosts from "./MyPosts";
+import StoreContext from "../../../StoreContext";
 
 //компонента должна получать только данные и callback
 const MyPostsContainer = (props) => {
-  let state = props.store.getState();
+  // let state = props.store.getState();
 
-  let addPost = () => {
-    props.store.dispatch(addPostActionCreator());
-  };
-
-  let onPostChange = (text) => {
-    //Функция которая создаст ActionCreator и задиспачит его
-    let action = updateNewPostTextActionCreator(text);
-    props.store.dispatch(action);
-  };
-  //эти параметры мы получаем из MyPosts.jsx
   return (
-    <MyPosts
-      updateNewPostText={onPostChange}
-      addPost={addPost} 
-      posts={state.profilePage.posts}
-      newPostText={state.profilePage.newPostText}
-    />
+    //Потребитель родительского контекста StoreContext
+    <StoreContext.Consumer>
+      {/* //store-значение из контекста */}
+      {(store) => {
+        let state = store.getState();
+        let addPost = () => {
+          store.dispatch(addPostActionCreator());
+        };
+        let onPostChange = (text) => {
+          //Функция которая создаст ActionCreator и задиспачит его
+          let action = updateNewPostTextActionCreator(text);
+          store.dispatch(action);
+        };
+        return (
+          <MyPosts
+            updateNewPostText={onPostChange}
+            addPost={addPost}
+            posts={store.getState().profilePage.posts}
+            newPostText={store.getState().profilePage.newPostText}
+          />
+        );
+      }}
+    </StoreContext.Consumer>
   );
 };
 
 export default MyPostsContainer;
 
-//инфу o store вынесли в контейнерную компоненту
-//Весь смысл контейнерной компоненты просто быть оберткой и снабдить данными презентационную компоненту. ту MyPosts.jsx,
-// для обычной-функциональной компоненты в нашем случае MyPosts.jsx
+//вся инфа в комментах про StoreContext в index.js
+// и в 44 ролике с 10 мин

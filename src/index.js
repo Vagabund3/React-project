@@ -4,13 +4,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "./StoreContext";
 
 let rerenderEntireTree = (state) => {
   // rerenderEntireTree отрисовываетс все дерево компонент
   ReactDOM.render(
     <BrowserRouter>
-      <App state={state} dispatch={store.dispatch.bind(store)} store={store} />
-      {/*Вызываем этот метод из Store.js и передаем его в App state */}
+      {/* //Теперь любая дочернея компонента может обратиться к StorУ с помощью StoreContext
+      это попозволяет нам не использовать props */}
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>,
     document.getElementById("root")
   );
