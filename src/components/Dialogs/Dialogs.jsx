@@ -2,10 +2,6 @@ import React from "react";
 import s from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {
-  updateNewMessageBodyCreator,
-  sendMessageCreator,
-} from "../../Redux/Dialogs-reducer";
 
 const Dialogs = (props) => {
   let state = props.dialogsPage;
@@ -17,16 +13,16 @@ const Dialogs = (props) => {
   let messagesElements = state.messages.map((m) => (
     <Message message={m.message} />
   ));
+
   let newMessageBody = state.newMessageBody;
-    //хотим сообщить что мы нажали кнопку,значит нужно отправить сообщение
+  //хотим сообщить что мы нажали кнопку,значит нужно отправить сообщение
   let onSendMessageClick = () => {
-    ;
     props.sendMessage();
   };
 
   let onNewMessageChange = (e) => {
     let body = e.target.value;
-     props.updateNewMessageBody(body);
+    props.updateNewMessageBody(body);
   };
 
   return (

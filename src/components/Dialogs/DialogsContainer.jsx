@@ -7,28 +7,39 @@ import {
   sendMessageCreator,
 } from "../../Redux/Dialogs-reducer";
 import Dialogs from "./Dialogs";
+import { connect } from "react-redux";
 
 //компонента должна получать только данные и callback
-const DialogsContainer = (props) => {
-  let state = props.store.getState().dialogsPage;
 
-  let onSendMessageClick = () => {
-    props.store.dispatch(sendMessageCreator());
+//формируе 2 объекта которые соединяються в
+//один и приходят как пропсы внутрь (Dilogs)
+//Смысл первой функции замапить State:
+//превратить часть State(state.dialogsPage) в пропсы.
+const mapStateToProps = (state) => {
+  return {
+    dialogsPage: state.dialogsPage,
   };
-  //вместо (е) сюда приходит (body) потому-что мы передаем этот callbak-onNewMessageChange внутрь,
-  //а Dialogs.jsx внутри вызовет этот callback и передаст (body)
-  let onNewMessageChange = (body) => {
-    props.store.dispatch(updateNewMessageBodyCreator(body));
-  };
-
-  return (
-    <Dialogs
-      updateNewMessageBody={onNewMessageChange}
-      sendMessage={onSendMessageClick}
-      dialogsPage={state}
-    />
-  );
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateNewMessageBody: () => {
+      dispatch(sendMessageCreator());
+    },
+
+    sendMessage: (body) => {
+      dispatch(updateNewMessageBodyCreator(body));
+    },
+  };
+};
+//Контейнерная компонента, вызываем функцию connect и она возвращает другую функцию
+//и мы вызываем потом ту функцию,которую вернул нам предыдущий вызов
+//Dialogs законектили к storУ.
+//      Функция connect создает контейн.компоненту, внутри этой компоненты
+//      она рендерит презентац компоненту-см.выше и в нее в качестве пропсов
+//      передает те св-ва которые сидят в  mapStateToProps  и mapDispatchToProps
+
+const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
 
 export default DialogsContainer;
 

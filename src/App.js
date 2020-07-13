@@ -16,11 +16,11 @@ const App = (props) => {
       <Header />
       <Navbar />
       <div className="app-wrapper-content">
-        <Route path="/profile" render={() => <Profile store={props.store} />} />
+        <Route path="/profile" render={() => <Profile />} />
 
         <Route //следит за url,смотрит на адресную строку
           path="/dialogs"
-          render={() => <DialogsContainer store={props.store} />}
+          render={() => <DialogsContainer />}
         />
 
         <Route path="/news" render={() => <News />} />

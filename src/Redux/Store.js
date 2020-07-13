@@ -10,7 +10,7 @@ let store = {
         { id: 2, message: "Хочешь знать в какой?", likesCount: 23 },
         { id: 3, message: "Капитал прожиточного минимума", likesCount: 133 },
       ],
-      newPostText: "хуй что введешь",
+      newPostText: "Вводи текст,козел",
     },
 
     dialogsPage: {

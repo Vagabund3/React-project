@@ -17,34 +17,33 @@ let initialState = {
     { id: 5, message: "За Леброна и двор!" },
   ],
   newMessageBody: "",
-
-  };
+};
 //см. пример в profile-reducer.js
 const dialogsReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_NEW_MESSAGE_BODY:
       state.newMessageBody = action.body; //Здесь мы обращаемся к dialogsPage  он приходит под именем state
-  return state;
-    
-  case  SEND_MESSAGE:
-    let body = state.newMessageBody; //переменная для отправки сооющения (SEND_MESSAGE)
-    state.newMessageBody = "";
-    state.messages.push({ id: 6, message: body });
-  return state;
+      return state;
 
-  default: return state
+    case SEND_MESSAGE:
+      let body = state.newMessageBody; //переменная для отправки сооющения (SEND_MESSAGE)
+      state.newMessageBody = "";
+      state.messages.push({ id: 6, message: body });
+      return state;
+
+    default:
+      return state;
   }
 };
 
 export const updateNewMessageBodyCreator = (body) => ({
-    type: UPDATE_NEW_MESSAGE_BODY,
-    body: body,
-  });
-  export const sendMessageCreator = () => ({
-    type: SEND_MESSAGE,
-  });
+  type: UPDATE_NEW_MESSAGE_BODY,
+  body: body,
+});
+export const sendMessageCreator = () => ({
+  type: SEND_MESSAGE,
+});
 
 export default dialogsReducer;
 
-
-  //см. комменты в Profile-reducer.js
+//см. комменты в Profile-reducer.js
