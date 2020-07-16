@@ -6,38 +6,11 @@ import {
 import MyPosts from "./MyPosts";
 import { connect } from "react-redux";
 
-//компонента должна получать только данные и callback
-// const MyPostsContainer = (props) => {
-//   return (
-//     //Потребитель родительского контекста StoreContext
-//     <StoreContext.Consumer>
-//       {/* //store-значение из контекста */}
-//       {(store) => {
-//         let state = store.getState();
-//         let addPost = () => {
-//           store.dispatch(addPostActionCreator());
-//         };
-//         let onPostChange = (text) => {
-//           //Функция которая создаст ActionCreator и задиспачит его
-//           let action = updateNewPostTextActionCreator(text);
-//           store.dispatch(action);
-//         };
-//         return (
-//           <MyPosts
-//             updateNewPostText={onPostChange}
-//             addPost={addPost}
-//             posts={store.getState().profilePage.posts}
-//             newPostText={store.getState().profilePage.newPostText}
-//           />
-//         );
-//       }}
-//     </StoreContext.Consumer>
-//   );
-// };
-
+// когда происходят любые изменения в state запускается эта функция
+// и формир. новый объект и сравн. внутренности этих объектов
 const mapStateToProps = (state) => {
   return {
-    posts: state.profilePage.posts,
+    posts: state.profilePage.posts, //posts в statE изменился и произошла перерисовка. В pofile-reducer
     newPostText: state.profilePage.newPostText,
   };
 };
@@ -58,9 +31,9 @@ const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);
 
 export default MyPostsContainer;
 
-//вся инфа в комментах про StoreContext в index.js
-// и в 44 ролике с 10 мин
-
 //инфу o store вынесли в контейнерную компоненту
 //Весь смысл контейнерной компоненты просто быть оберткой и снабдить данными презентационную компоненту. ту MyPosts.jsx,
 // для обычной-функциональной компоненты в нашем случае MyPosts.jsx
+
+//           CONNECT помогает делать локальные перерисовки и внутри он сам делает subscribe
+//           давая нам возможеность не вызывать subscribe. Про connect см коммент. в DalogsCont..

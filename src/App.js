@@ -22,7 +22,6 @@ const App = (props) => {
           path="/dialogs"
           render={() => <DialogsContainer />}
         />
-
         <Route path="/news" render={() => <News />} />
         <Route path="/video" render={() => <Video />} />
         <Route path="/settings" render={() => <Settings />} />

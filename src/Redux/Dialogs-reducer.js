@@ -18,18 +18,28 @@ let initialState = {
   ],
   newMessageBody: "",
 };
-//см. пример в profile-reducer.js
+
 const dialogsReducer = (state = initialState, action) => {
+  //см. пример в profile-reducer.js
+  //мы должны копировать только то что должны изменить
+  //создали новый объект и соответ. Dilogs перерисуеться.
+  // Для чего нужно копирование и как работпет  см 48 с 21 мин. и(см 47 видос с 12 мин и с 18)
+  
   switch (action.type) {
     case UPDATE_NEW_MESSAGE_BODY:
-      state.newMessageBody = action.body; //Здесь мы обращаемся к dialogsPage  он приходит под именем state
-      return state;
+      return {
+        ...state,
+        newMessageBody: action.body, //Здесь мы обращаемся к dialogsPage  он приходит под именем state
+      };
 
     case SEND_MESSAGE:
       let body = state.newMessageBody; //переменная для отправки сооющения (SEND_MESSAGE)
-      state.newMessageBody = "";
-      state.messages.push({ id: 6, message: body });
-      return state;
+      return {
+        ...state, //cоздали новый массив,слева закидываем все элем из страрого messages
+        // а справа //пушим этот элем. в массив
+        messages: [...state.messages, { id: 6, message: body }],
+        newMessageBody: "",
+      };
 
     default:
       return state;

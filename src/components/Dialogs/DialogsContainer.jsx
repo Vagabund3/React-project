@@ -15,19 +15,19 @@ import { connect } from "react-redux";
 //один и приходят как пропсы внутрь (Dilogs)
 //Смысл первой функции замапить State:
 //превратить часть State(state.dialogsPage) в пропсы.
-const mapStateToProps = (state) => {
+let mapStateToProps = (state) => {
   return {
     dialogsPage: state.dialogsPage,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch) => {
   return {
-    updateNewMessageBody: () => {
+    sendMessage: () => {
       dispatch(sendMessageCreator());
     },
 
-    sendMessage: (body) => {
+    updateNewMessageBody: (body) => {
       dispatch(updateNewMessageBodyCreator(body));
     },
   };
@@ -46,3 +46,6 @@ export default DialogsContainer;
 //инфу o store вынесли в контейнерную компоненту
 //Весь смысл контейнерной компоненты просто быть оберткой и снабдить данными презентационную компоненту. ту MyPosts.jsx,
 // для обычной-функциональной компоненты в нашем случае Dialogs.jsx
+
+//           CONNECT помогает делать локальные перерисовки и внутри он сам делает subscribe
+//           давая нам возможеность не вызывать subscribe
