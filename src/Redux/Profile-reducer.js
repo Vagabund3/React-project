@@ -50,7 +50,7 @@ const profileReducer = (state = initialState, action) => {
 // addPostActionCreator вспомогательная функция которая помогает не ошибиться в создании Action
 //ActionCreator необходимо создавать чтобы их заДиспачить (dispatch)
 //ActionCreator пользуються пользователи UI
-export const addPostActionCreator = () => ({ type: ADD_POST });
+export const addPostActionCreator =  () => ({ type: ADD_POST });
 export const updateNewPostTextActionCreator = (text) => ({
   type: UPDATE_NEW_POST_TEXT,
   newText: text,

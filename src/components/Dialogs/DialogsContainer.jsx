@@ -9,11 +9,14 @@ import {
 import Dialogs from "./Dialogs";
 import { connect } from "react-redux";
 
-//компонента должна получать только данные и callback
+//компонента должна получать только данные и callbacku
 
 //формируе 2 объекта которые соединяються в
 //один и приходят как пропсы внутрь (Dilogs)
-//Смысл первой функции замапить State:
+//Смысл первой функции принимать весь глобальный state целиком-
+//-(глобальный state) всего приложения и возвращает объект
+// только с теми данными которые нам нужны
+
 //превратить часть State(state.dialogsPage) в пропсы.
 let mapStateToProps = (state) => {
   return {
@@ -21,6 +24,10 @@ let mapStateToProps = (state) => {
   };
 };
 
+//служит для того чтобы передавать дочерней презентационной компоненте,через пропсы callback
+//про эту функцию (mapDispatchToProps) смотри объяснение в 49 ролике, с 38.25
+//мы dispatch не (actionCreator) мы dispatch результат работы (actionCreator) 
+//мы его вызываем а он возвращает нам action,тое-есть dispatch всегда action
 let mapDispatchToProps = (dispatch) => {
   return {
     sendMessage: () => {

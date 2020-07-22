@@ -20,11 +20,10 @@ let initialState = {
 };
 
 const dialogsReducer = (state = initialState, action) => {
-  //см. пример в profile-reducer.js
   //мы должны копировать только то что должны изменить
   //создали новый объект и соответ. Dilogs перерисуеться.
   // Для чего нужно копирование и как работпет  см 48 с 21 мин. и(см 47 видос с 12 мин и с 18)
-  
+
   switch (action.type) {
     case UPDATE_NEW_MESSAGE_BODY:
       return {
@@ -56,4 +55,4 @@ export const sendMessageCreator = () => ({
 
 export default dialogsReducer;
 
-//см. комменты в Profile-reducer.js
+//см. пример и комменты в profile-reducer.js и про reducer

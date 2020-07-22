@@ -9,6 +9,7 @@ import News from "./components/News/News";
 import Video from "./components/Video/Video";
 import Settings from "./components/Settings/Settings";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import UsersContainer from "./components/Users/UsersContainer";
 
 const App = (props) => {
   return (
@@ -22,6 +23,8 @@ const App = (props) => {
           path="/dialogs"
           render={() => <DialogsContainer />}
         />
+        <Route path="/users" render={() => <UsersContainer />} />
+
         <Route path="/news" render={() => <News />} />
         <Route path="/video" render={() => <Video />} />
         <Route path="/settings" render={() => <Settings />} />
