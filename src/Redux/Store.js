@@ -41,7 +41,7 @@ let store = {
     return this._state; // к свойству объекта всегда обращаться через this
   },
   subscribe(observer) {
-    this._callSubscriber = observer; // Наблюдател-Паттерн
+    this._callSubscriber = observer; // Наблюдатель-Паттерн
   },
 
   // все что нужно менять во внешнем мире использовать метод Dispatch() чтобы им пользоваться
