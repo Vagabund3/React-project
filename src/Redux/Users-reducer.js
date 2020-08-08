@@ -1,9 +1,14 @@
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
+const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
 
 let initialState = {
   users: [],
+  pageSize: 5,
+  totalUsersCount: 0,
+  currentPage: 2,
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -40,10 +45,22 @@ const usersReducer = (state = initialState, action) => {
       return {
         //c сервера приходят подьзователи, берем старый (...state),
         //берем пользователей,которые там были(users)
-        //создаем копию массива и дописываем к ним users которые пришли из (action.users)
-        //то есть мы склеиваем 2 массива:которые были в state и которые пришли в aciton
+        //перезатираем массив новыи пользователи которые пришли из (action.users)
         ...state,
-        users: [...state.users, ...action.users],
+        users: action.users,
+      };
+    }
+    //при клике меняем текущую страницу(currentPage)
+    case SET_CURRENT_PAGE: {
+      return {
+        ...state,
+        currentPage: action.currentPage,
+      };
+    }
+    case SET_TOTAL_USERS_COUNT: {
+      return {
+        ...state,
+        totalUsersCount: action.count,
       };
     }
 
@@ -56,6 +73,15 @@ export const followAC = (userId) => ({ type: FOLLOW, userId });
 export const unfollowAC = (userId) => ({ type: UNFOLLOW, userId });
 //action который будет SetАТЬ users-устанавливать users
 export const setUsersAC = (users) => ({ type: SET_USERS, users });
+export const setCurrentPageAC = (currentPage) => ({
+  type: SET_CURRENT_PAGE,
+  currentPage,
+});
+//количество пользователей
+export const setUsersTotalCountAC = (totalUserCount) => ({
+  type: SET_TOTAL_USERS_COUNT,
+  count: totalUserCount,
+});
 
 export default usersReducer;
 

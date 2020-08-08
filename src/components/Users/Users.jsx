@@ -12,27 +12,67 @@ import userPhoto from "../../assets/images/UsersAva.png";
 //классовая компонента
 class Users extends React.Component {
   //конструирование объекта происходить лишь 1 раз
-  //базоваяя задача,передать эти props-передать конструирование родительской компоненте (React.Component)
-  constructor(props) {
-    super(props);
-     Axios.get("https://social-network.samuraijs.com/api/1.0/users").then(
-      (response) => {
-        this.props.setUsers(response.data.items);
-      }
-    );
+  //базоваяя задача,передать эти props,передать конструирование родительской компоненте (React.Component)
+  componentDidMount() {
+    Axios.get(
+      `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`
+    ).then((response) => {
+      this.props.setUsers(response.data.items); //это и есть массив наших пользоват (response.data.items)
+      //количество пользователей
+      this.props.setTotalUsersCount(response.data.totalCount);
+    });
   }
+
+  //Метод. чтобы делать ajax запрос во время клика
+  onePageChanged = (pageNumber) => {
+    this.props.setCurrentPage(pageNumber);
+    Axios.get(
+      `https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`
+    ).then((response) => {
+      this.props.setUsers(response.data.items);
+    });
+  };
 
   //let var const - это переменные, мы не имеем права объявлять их внутри классов,
   //все что мы можем объявлять это название методов (Constructor,render и тд.)
   render() {
+    //Math.ceil округляет до целого числа  делим количество пользователей(сколько всего) на размер страницы и получаем кол-во страниц
+    let pageCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
+    // и рисуем кол-во этих страниц - создаем массив
+    let pages = [];
+    for (let i = 1; i <= pageCount; i++) {
+      pages.push(i);
+    }
+
     return (
       <div>
+        <div>
+          {pages.map((p) => {
+            return (
+              <span
+                //если currentPage равна {p}-(которую мы push выше)
+                //то тогда styles.selectedPage прийдет в className
+                className={this.props.currentPage === p && styles.selectedPage}
+                //(р) по которой мы итерируемся-(пробегем),
+                // она будет текущей страницей при нажатии и изменитсья CurrentPage
+                //обработчиком события будет эта функция
+                onClick={(e) => {
+                  this.onePageChanged(p);
+                }}
+              >
+                {p}
+              </span>
+            ); //{p} - номер страницы
+          })}
+        </div>
+
         {/* //props теперь это св-во объекта поэтому ставим  this */}
         {this.props.users.map((u) => (
           <div key={u.id}>
             <span>
               <div>
-                {/* //если small не равен null, тогда берем small  в противном случае берем фиксированную картинку  */}
+                {/* //если small не равен null, тогда берем small 
+                // в противном случае берем фиксированную картинку  */}
                 <img
                   src={u.photos.small != null ? u.photos.small : userPhoto}
                   className={styles.userPhoto}
@@ -60,6 +100,7 @@ class Users extends React.Component {
                 )}
               </div>
             </span>
+
             <span>
               <span>
                 <div>{u.name}</div>

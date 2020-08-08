@@ -23,10 +23,10 @@ let mapStateToProps = (state) => {
     dialogsPage: state.dialogsPage,
   };
 };
-
+////Все callbackИ, которые DispatchАТ что-то в state мы закидываем в mapDispatchToProps
 //служит для того чтобы передавать дочерней презентационной компоненте,через пропсы callback
 //про эту функцию (mapDispatchToProps) смотри объяснение в 49 ролике, с 38.25
-//мы dispatch не (actionCreator) мы dispatch результат работы (actionCreator) 
+//мы dispatch не (actionCreator) мы dispatch результат работы (actionCreator)
 //мы его вызываем а он возвращает нам action,тое-есть dispatch всегда action
 let mapDispatchToProps = (dispatch) => {
   return {
