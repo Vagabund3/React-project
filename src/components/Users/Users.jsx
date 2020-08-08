@@ -39,7 +39,7 @@ class Users extends React.Component {
     //Math.ceil округляет до целого числа  делим количество пользователей(сколько всего) на размер страницы и получаем кол-во страниц
     let pageCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
     // и рисуем кол-во этих страниц - создаем массив
-    let pages = [];
+    let pages = []; 
     for (let i = 1; i <= pageCount; i++) {
       pages.push(i);
     }
