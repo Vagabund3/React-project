@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  addPostActionCreator,
-  updateNewPostTextActionCreator,
-} from "../../../Redux/Profile-reducer";
+import { addPost, updateNewPostText } from "../../../Redux/Profile-reducer";
 import MyPosts from "./MyPosts";
 import { connect } from "react-redux";
 
@@ -15,25 +12,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateNewPostText: (text) => {
-      let action = updateNewPostTextActionCreator(text);
-      dispatch(action);
-    },
-    addPost: () => {
-      dispatch(addPostActionCreator());
-    },
-  };
-};
-
-const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);
-
-export default MyPostsContainer;
+export default connect(mapStateToProps, { updateNewPostText, addPost })(
+  MyPosts
+);
 
 //инфу o store вынесли в контейнерную компоненту
 //Весь смысл контейнерной компоненты просто быть оберткой и снабдить данными презентационную компоненту. ту MyPosts.jsx,
 // для обычной-функциональной компоненты в нашем случае MyPosts.jsx
 //           давая нам возможеность не вызывать subscribe. Про connect см коммент. в DalogsCont..
 
-        //   !!! каждый шаг см. комменты в DialogsContainer!!!
+//   !!! каждый шаг см. комменты в DialogsContainer!!!

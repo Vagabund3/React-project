@@ -2,10 +2,7 @@ import React from "react";
 import s from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {
-  updateNewMessageBodyCreator,
-  sendMessageCreator,
-} from "../../Redux/Dialogs-reducer";
+import { updateNewMessageBody, sendMessage } from "../../Redux/Dialogs-reducer";
 import Dialogs from "./Dialogs";
 import { connect } from "react-redux";
 
@@ -28,17 +25,7 @@ let mapStateToProps = (state) => {
 //про эту функцию (mapDispatchToProps) смотри объяснение в 49 ролике, с 38.25
 //мы dispatch не (actionCreator) мы dispatch результат работы (actionCreator)
 //мы его вызываем а он возвращает нам action,тое-есть dispatch всегда action
-let mapDispatchToProps = (dispatch) => {
-  return {
-    sendMessage: () => {
-      dispatch(sendMessageCreator());
-    },
 
-    updateNewMessageBody: (body) => {
-      dispatch(updateNewMessageBodyCreator(body));
-    },
-  };
-};
 //Контейнерная компонента, вызываем функцию connect и она возвращает другую функцию
 //и мы вызываем потом ту функцию,которую вернул нам предыдущий вызов
 //Dialogs законектили к storУ.
@@ -46,9 +33,20 @@ let mapDispatchToProps = (dispatch) => {
 //      она рендерит презентац компоненту-см.выше и в нее в качестве пропсов
 //      передает те св-ва которые сидят в  mapStateToProps  и mapDispatchToProps
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
+                         //UPDATE  mapDispatchToProps
+//Контейнерная компонента над другой контейнерной компонентой
+// Это объект АС(ов) который мы закидываем вторым параметром в функцию connect
+// можно не писать dispatch каждый раз тк. connect может это сделать автоматически
+//автоматически  обертывание calback(АМИ)
+// connect определяет что к нему пришла не функция а объкт
+//И еще, если мы в объекте пишем (name:name) как делаем это ниже
+// то мы можем написать просто (name),это означает,я создам в объекте св-во (name)
+//значением которого возьму значение переменной
 
-export default DialogsContainer;
+export default connect(mapStateToProps, {
+  sendMessage,
+  updateNewMessageBody,
+})(Dialogs);
 
 //инфу o store вынесли в контейнерную компоненту
 //Весь смысл контейнерной компоненты просто быть оберткой и снабдить данными презентационную компоненту. ту MyPosts.jsx,

@@ -1,16 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
-  unfollowAC,
-  followAC,
-  setUsersAC,
-  setCurrentPageAC,
-  setUsersTotalCountAC,
-  ToggleIsFetchingAC,
+  unfollow,
+  follow,
+  setUsers,
+  setCurrentPage,
+  setTotalUsersCount,
+  toggleIsFetching,
 } from "../../Redux/Users-reducer";
 import * as Axios from "axios";
 import Users from "./Users";
-import preloader from "../../assets/images/preloader.svg";
 import Preloader from "../common/Preloader";
 
 //контейнерная компонента которая делает ajax запросы к серверному API,отрисовывает презентац. компоненту
@@ -72,35 +71,16 @@ let mapStateToProps = (state) => {
     isFetching: state.usersPage.isFetching,
   };
 };
-////Все callbackИ, которые DispatchАТ что-то в state мы закидываем в mapDispatchToProps
-let mapDispatchToProps = (dispatch) => {
-  return {
-    follow: (userId) => {
-      dispatch(followAC(userId));
-    },
 
-    unfollow: (userId) => {
-      dispatch(unfollowAC(userId));
-    },
-    setUsers: (users) => {
-      dispatch(setUsersAC(users));
-    },
-    //pageNumber-номер страницы который нам нужно dispatch
-    setCurrentPage: (pageNumber) => {
-      dispatch(setCurrentPageAC(pageNumber));
-    },
-    //количество пользователей
-    setTotalUsersCount: (totalCount) => {
-      dispatch(setUsersTotalCountAC(totalCount));
-    },
-    toggleIsFetching: (isFetching) => {
-      dispatch(ToggleIsFetchingAC(isFetching));
-    },
-  };
-};
+export default connect(mapStateToProps, {
+  follow,
+  unfollow,
+  setUsers,
+  setCurrentPage,//pageNumber-номер страницы который нам нужно dispatch
+  setTotalUsersCount,//количество пользователей
 
-//контейнерная компонента над другой контейнерной компонентой
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+  toggleIsFetching,
+})(UsersContainer);
 
 // создаем контейнерную компоненту с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!
