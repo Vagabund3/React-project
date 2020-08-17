@@ -11,8 +11,6 @@ ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>
-    {/*Вызываем этот метод из Store.js и передаем его в App state */}
   </BrowserRouter>,
   document.getElementById("root")
 );
-

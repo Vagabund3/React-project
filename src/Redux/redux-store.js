@@ -13,8 +13,7 @@ let reducers = combineReducers({
   usersPage: usersReducer,
 });
 
-//createStore создает внутри себя
-//state у которого есть 3 наших св-ва
+
 let store = createStore(reducers);
 
 window.store = store;

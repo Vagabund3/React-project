@@ -1,6 +1,6 @@
 const ADD_POST = "ADD_POST";
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
-
+const SET_USER_PROFILE = "SET_USER_PROFILE";
 //Инициализирует profileReducer в случае если state не прийдет в функцию
 let initialState = {
   posts: [
@@ -9,6 +9,7 @@ let initialState = {
     { id: 3, message: "Капитал прожиточного минимума", likesCount: 133 },
   ],
   newPostText: "Вводи текст здесь",
+  profile: null,
 };
 //Reducer принимает state и action преобразовывает и возвращает преобразованный state
 //приходит не весь state а только та часть которая нужна конкретному Reducer
@@ -38,6 +39,14 @@ const profileReducer = (state = initialState, action) => {
         newPostText: action.newText,
       };
     }
+    case SET_USER_PROFILE: {
+      return {
+        ...state,
+        //меняем profile на profile который сидит в action
+        profile: action.profile,
+      };
+    }
+
     default:
       return state; // case по умолчанию
   }
@@ -50,10 +59,14 @@ const profileReducer = (state = initialState, action) => {
 // addPostActionCreator вспомогательная функция которая помогает не ошибиться в создании Action
 //ActionCreator необходимо создавать чтобы их заДиспачить (dispatch)
 //ActionCreator пользуються пользователи UI
-export const addPost =  () => ({ type: ADD_POST });
+export const addPost = () => ({ type: ADD_POST });
 export const updateNewPostText = (text) => ({
   type: UPDATE_NEW_POST_TEXT,
   newText: text,
+});
+export const setUserProfile = (profile) => ({
+  type: SET_USER_PROFILE,
+  profile,
 });
 
 export default profileReducer;

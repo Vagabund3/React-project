@@ -16,6 +16,8 @@ import Preloader from "../common/Preloader";
 class UsersContainer extends React.Component {
   //конструирование объекта происходить лишь 1 раз
   //базоваяя задача,передать эти props,передать конструирование родительской компоненте (React.Component)
+  // componentDidMount это такие методы которые есть у объекта который, создан с помощью этого класса,
+  // этот объект отвечает за компоненту и react взаимодействует с этим объектом
   componentDidMount() {
     this.props.toggleIsFetching(true);
     Axios.get(
@@ -76,8 +78,8 @@ export default connect(mapStateToProps, {
   follow,
   unfollow,
   setUsers,
-  setCurrentPage,//pageNumber-номер страницы который нам нужно dispatch
-  setTotalUsersCount,//количество пользователей
+  setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
+  setTotalUsersCount, //количество пользователей
 
   toggleIsFetching,
 })(UsersContainer);

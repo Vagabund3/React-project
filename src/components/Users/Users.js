@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./users.module.css";
 import userPhoto from "../../assets/images/UsersAva.png";
+import { NavLink } from "react-router-dom";
 
 // чистая функциональная компонента
 //получает только данные из props и возвращает callback ниже
@@ -40,12 +41,14 @@ let Users = (props) => {
         <div key={u.id}>
           <span>
             <div>
-              {/* //если small не равен null, тогда берем small 
+              <NavLink to={"/profile/"+ u.id}>
+                {/* //если small не равен null, тогда берем small 
             // в противном случае берем фиксированную картинку  */}
-              <img
-                src={u.photos.small != null ? u.photos.small : userPhoto}
-                className={styles.userPhoto}
-              />
+                <img
+                  src={u.photos.small != null ? u.photos.small : userPhoto}
+                  className={styles.userPhoto}
+                />
+              </NavLink>
             </div>
             <div>
               {/* исп. тернарный оператор (? и :)
