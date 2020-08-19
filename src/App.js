@@ -16,8 +16,10 @@ const App = (props) => {
       <Header />
       <Navbar />
       <div className="app-wrapper-content">
-        <Route path="/profile" render={() => <ProfileContainer />} />
-
+        <Route
+          path="/profile/:userId?" //userId говорит что в url есть params{}, ? говорит что параметр не обязат.19 мин 60 видео
+          render={() => <ProfileContainer />}
+        />
         <Route //следит за url,смотрит на адресную строку
           path="/dialogs"
           render={() => <DialogsContainer />}
