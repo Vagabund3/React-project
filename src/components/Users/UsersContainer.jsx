@@ -26,7 +26,7 @@ class UsersContainer extends React.Component {
       this.props.toggleIsFetching(false);
       this.props.setUsers(response.data.items); //это и есть массив наших пользоват (response.data.items)
       //количество пользователей
-      this.props.setTotalUsersCount(response.data.totalCount);
+      this.props.setTotalUsersCount(response.data.totalCount); //121
     });
   }
 
@@ -79,8 +79,7 @@ export default connect(mapStateToProps, {
   unfollow,
   setUsers,
   setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
-  setTotalUsersCount, //количество пользователей
-
+  setTotalUsersCount, //количество пользователей  
   toggleIsFetching,
 })(UsersContainer);
 

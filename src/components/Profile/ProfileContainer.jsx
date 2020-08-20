@@ -40,3 +40,4 @@ export default connect(mapStateToProps, { setUserProfile })(
 
 // создаем контейнерную компоненту с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!
+ 
