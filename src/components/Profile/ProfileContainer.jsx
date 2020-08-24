@@ -38,6 +38,5 @@ export default connect(mapStateToProps, { setUserProfile })(
   WithUrlDataContainerComponent
 );
 
-// создаем контейнерную компоненту с помощью Функции connect
+// создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!
- 

@@ -2,8 +2,9 @@ import React from "react";
 import styles from "./users.module.css";
 import userPhoto from "../../assets/images/UsersAva.png";
 import { NavLink } from "react-router-dom";
+import Axios from "axios";
 
-// чистая функциональная компонента
+// чистая функциональная презентац. компонента
 //получает только данные из props и возвращает callback ниже
 let Users = (props) => {
   //Math.ceil округляет до целого числа  делим количество пользователей(сколько всего) на размер страницы и получаем кол-во страниц
@@ -13,6 +14,8 @@ let Users = (props) => {
   for (let i = 1; i <= pageCount; i++) {
     pages.push(i);
   }
+
+  //делаем 2 callback на подписку и отписку
 
   return (
     <div>
@@ -41,7 +44,7 @@ let Users = (props) => {
         <div key={u.id}>
           <span>
             <div>
-              <NavLink to={"/profile/"+ u.id}>
+              <NavLink to={"/profile/" + u.id}>
                 {/* //если small не равен null, тогда берем small 
             // в противном случае берем фиксированную картинку  */}
                 <img
@@ -52,11 +55,29 @@ let Users = (props) => {
             </div>
             <div>
               {/* исп. тернарный оператор (? и :)
-            когда кликнут,отработает callback функция и возьмет в пропсах follow и передаст туда id*/}
+            когда кликнут,отработает callback функция (которую создает connect)
+            и возьмет в пропсах follow или unfollow  и передаст туда id
+            в этих обработчиках делаем AJAX запросы
+            */}
               {u.followed ? (
                 <button
                   onClick={() => {
-                    props.unfollow(u.id);
+                    //для отписки шлем delete запрос
+                    Axios.delete(
+                      `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
+                      {
+                        withCredentials: true,
+                        headers: {
+                          "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
+                        },
+                      }
+                    ).then((response) => {
+                      //сервер подтв. что подписка или отписка произошла
+                      //и мы должны задиспачить этот callback в reducer
+                      if (response.data.resultCode === 0) {
+                        props.unfollow(u.id);
+                      }
+                    });
                   }}
                 >
                   Unfollow
@@ -64,7 +85,20 @@ let Users = (props) => {
               ) : (
                 <button
                   onClick={() => {
-                    props.follow(u.id);
+                    Axios.post(
+                      `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
+                      {},
+                      {
+                        withCredentials: true,
+                        headers: {
+                          "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
+                        },
+                      }
+                    ).then((response) => {
+                      if (response.data.resultCode === 0) {
+                        props.follow(u.id);
+                      }
+                    });
                   }}
                 >
                   Follow
