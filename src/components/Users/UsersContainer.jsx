@@ -8,9 +8,10 @@ import {
   setTotalUsersCount,
   toggleIsFetching,
 } from "../../Redux/Users-reducer";
-import * as Axios from "axios";  
+import * as Axios from "axios";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
+import { getUsers } from "../../api/api";
 
 //контейнерная компонента которая делает ajax запросы к серверному API,отрисовывает презентац. компоненту
 class UsersContainer extends React.Component {
@@ -20,16 +21,11 @@ class UsersContainer extends React.Component {
   // этот объект отвечает за компоненту и react взаимодействует с этим объектом
   componentDidMount() {
     this.props.toggleIsFetching(true);
-    Axios.get(
-      `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`,
-      {
-        withCredentials: true,
-      }
-    ).then((response) => {
+    //вызываем getUsers из api.js
+    getUsers(this.props.currentPage, this.props.pageSize).then((data) => {
       this.props.toggleIsFetching(false);
-      this.props.setUsers(response.data.items); //это и есть массив наших пользоват (response.data.items)
-      //количество пользователей
-      this.props.setTotalUsersCount(response.data.totalCount); //121
+      this.props.setUsers(data.items); //это и есть массив наших пользоват (response.data.items)
+      this.props.setTotalUsersCount(data.totalCount); //121  //количество пользователей
     });
   }
 
@@ -37,13 +33,8 @@ class UsersContainer extends React.Component {
   onPageChanged = (pageNumber) => {
     this.props.setCurrentPage(pageNumber);
     this.props.toggleIsFetching(true);
-    Axios.get(
-      `https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`,
-      {
-        withCredentials: true,
-      }
-    ).then((response) => {
-      this.props.setUsers(response.data.items);
+    getUsers(pageNumber, this.props.pageSize).then((data) => {
+      this.props.setUsers(data.items);
       this.props.toggleIsFetching(false);
     });
   };
