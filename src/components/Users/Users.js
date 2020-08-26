@@ -60,8 +60,10 @@ let Users = (props) => {
             в этих обработчиках делаем AJAX запросы
             */}
               {u.followed ? (
-                <button
+                <button //если кто-нибудь в этом массиве равен u.id то тогда метод some вернет true или false
+                  disabled={props.followingInProgress.some((id) => id === u.id)}
                   onClick={() => {
+                    props.toggleIsFollowingProgress(true, u.id); // перед запросом диспачим true
                     //для отписки шлем delete запрос
                     Axios.delete(
                       `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
@@ -77,6 +79,7 @@ let Users = (props) => {
                       if (response.data.resultCode === 0) {
                         props.unfollow(u.id);
                       }
+                      props.toggleIsFollowingProgress(false, u.id); //когда запрос закончится то диспачим false
                     });
                   }}
                 >
@@ -84,7 +87,10 @@ let Users = (props) => {
                 </button>
               ) : (
                 <button
+                  disabled={props.followingInProgress.some((id) => id === u.id)}
                   onClick={() => {
+                    props.toggleIsFollowingProgress(true, u.id);
+
                     Axios.post(
                       `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
                       {},
@@ -98,6 +104,7 @@ let Users = (props) => {
                       if (response.data.resultCode === 0) {
                         props.follow(u.id);
                       }
+                      props.toggleIsFollowingProgress(false, u.id);
                     });
                   }}
                 >

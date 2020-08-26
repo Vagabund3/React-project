@@ -7,11 +7,11 @@ import {
   setCurrentPage,
   setTotalUsersCount,
   toggleIsFetching,
+  toggleIsFollowingProgress,
 } from "../../Redux/Users-reducer";
-import * as Axios from "axios";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
-import { getUsers } from "../../api/api";
+import { usersApi } from "../../api/api";
 
 //контейнерная компонента которая делает ajax запросы к серверному API,отрисовывает презентац. компоненту
 class UsersContainer extends React.Component {
@@ -22,18 +22,21 @@ class UsersContainer extends React.Component {
   componentDidMount() {
     this.props.toggleIsFetching(true);
     //вызываем getUsers из api.js
-    getUsers(this.props.currentPage, this.props.pageSize).then((data) => {
-      this.props.toggleIsFetching(false);
-      this.props.setUsers(data.items); //это и есть массив наших пользоват (response.data.items)
-      this.props.setTotalUsersCount(data.totalCount); //121  //количество пользователей
-    });
+    usersApi
+      .getUsers(this.props.currentPage, this.props.pageSize)
+      .then((data) => {
+        this.props.toggleIsFetching(false);
+        this.props.setUsers(data.items); //это и есть массив наших пользоват (response.data.items)
+        this.props.setTotalUsersCount(data.totalCount); //121  //количество пользователей
+      });
   }
 
   //Метод чтобы делать ajax запрос во время клика
   onPageChanged = (pageNumber) => {
     this.props.setCurrentPage(pageNumber);
     this.props.toggleIsFetching(true);
-    getUsers(pageNumber, this.props.pageSize).then((data) => {
+
+    usersApi.getUsers(pageNumber, this.props.pageSize).then((data) => {
       this.props.setUsers(data.items);
       this.props.toggleIsFetching(false);
     });
@@ -54,6 +57,8 @@ class UsersContainer extends React.Component {
           users={this.props.users}
           unfollow={this.props.unfollow}
           follow={this.props.follow}
+          toggleIsFollowingProgress={this.props.toggleIsFollowingProgress}
+          followingInProgress={this.props.followingInProgress}
         />
       </>
     );
@@ -68,6 +73,7 @@ let mapStateToProps = (state) => {
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
     isFetching: state.usersPage.isFetching,
+    followingInProgress: state.usersPage.followingInProgress,
   };
 };
 
@@ -78,6 +84,7 @@ export default connect(mapStateToProps, {
   setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
   setTotalUsersCount, //количество пользователей
   toggleIsFetching,
+  toggleIsFollowingProgress,
 })(UsersContainer);
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect

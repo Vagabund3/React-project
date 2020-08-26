@@ -4,13 +4,19 @@ const SET_USERS = "SET_USERS";
 const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
 const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
+const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE_IS_FOLLOWING_PROGRESS";
 
 let initialState = {
   users: [],
   pageSize: 5,
   totalUsersCount: 0,
   currentPage: 1,
-  isFetching: true, 
+  isFetching: true, //крутилка
+  //в процессе запроса блокируем кнопку чтобы предотвратить многократные запросы на серв.
+  //сделаем массивом и в него будем помещать id того пользователя котрого будем follow/unfollow
+  //задача в том что когда идет подписка нужно помещать в массив id пользователя
+  // когда отписка, то из массива забираем
+  followingInProgress: [],
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -74,6 +80,17 @@ const usersReducer = (state = initialState, action) => {
       };
     }
 
+    case TOGGLE_IS_FOLLOWING_PROGRESS: {
+      return {
+        ...state,
+        followingInProgress: action.isFetching
+          ? //если true когда идет подписка то добавляем новую id которая приходит в action
+            [...state.followingInProgress, action.userId]
+          : // а если false то отфильтруем не нужного пользователя,пропускаем только ту id, которая не равна id из в action (userId)
+            state.followingInProgress.filter((id) => id != action.userId),
+      };
+    }
+
     default:
       return state;
   }
@@ -95,6 +112,11 @@ export const setTotalUsersCount = (totalUserCount) => ({
 export const toggleIsFetching = (isFetching) => ({
   type: TOGGLE_IS_FETCHING,
   isFetching,
+});
+
+export const toggleIsFollowingProgress = (isFetching, userId) => ({
+  type: TOGGLE_IS_FOLLOWING_PROGRESS,
+  isFetching,userId
 });
 
 export default usersReducer;

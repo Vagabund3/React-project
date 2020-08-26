@@ -4,7 +4,7 @@ import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import { updateNewMessageBody, sendMessage } from "../../Redux/Dialogs-reducer";
 import Dialogs from "./Dialogs";
-import { connect } from "react-redux";
+import { connect } from "react-redux";   
 
 //компонента должна получать только данные и callbacku
 
