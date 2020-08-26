@@ -1,17 +1,35 @@
 import * as Axios from "axios";
 
+// Создаем конкретный экземпляр AxiosA-(Instance)- это объекты которые содержат настройки по работе с конкретной API
+const instance = Axios.create({
+  withCredentials: true,
+  baseURL: "https://social-network.samuraijs.com/api/1.0/",
+  headers: {
+    "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
+  },
+});
+
 //Запрос чтобы получить Users и тд
 // Если функции нужны данные которых у нее нет она получает данные из параметров (currentPag,pageSize)
 export const getUsers = (currentPage = 1, pageSize = 10) => {
   //ruturn то что возвращает нам Get
-  return Axios.get(
-    `https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`,
-    {
-      withCredentials: true,
-    }
-    //return не тот промис который возвращается методом get выше, а тот что вернул нам .then,  а он возвращает другой промис,в котором сидит не весь response,а только data из response
-    //из этого response берем date и возвращаем ее
-  ).then((response) => {
-    return response.data;
-  });
+  return instance
+    .get(
+      `users?page=${currentPage}&count=${pageSize}`
+      //return не тот промис который возвращается методом get выше,
+      // а тот что вернул нам .then,  а он возвращает другой промис,
+      //в котором сидит не весь response,а только data из response
+      //из этого response берем date и возвращаем ее
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+export const getUsers2 = (currentPage = 1, pageSize = 10) => {
+  return instance
+    .get(`follow?page=${currentPage}&count=${pageSize}`)
+    .then((response) => {
+      return response.data;
+    });
 };
