@@ -1,3 +1,6 @@
+import { usersApi } from "../api/api";
+
+//BLL
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
@@ -116,8 +119,22 @@ export const toggleIsFetching = (isFetching) => ({
 
 export const toggleIsFollowingProgress = (isFetching, userId) => ({
   type: TOGGLE_IS_FOLLOWING_PROGRESS,
-  isFetching,userId
+  isFetching,
+  userId,
 });
+
+//thunkCreator функция которая что-то принемает и возвращать thunk
+export const getUsers = (currentPage, pageSize) => {
+  return (dispatch) => {  
+    dispatch(toggleIsFetching(true));
+    //вызываем getUsers из api.js
+    usersApi.getUsers(currentPage, pageSize).then((data) => {
+      dispatch(toggleIsFetching(false)); //диспачим actions
+      dispatch(setUsers(data.items)); //это и есть массив наших пользоват (response.data.items)
+      dispatch(setTotalUsersCount(data.totalCount)); //121  //количество пользователей
+    });
+  };
+};
 
 export default usersReducer;
 

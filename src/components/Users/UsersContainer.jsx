@@ -1,17 +1,18 @@
+//UI
 import React from "react";
 import { connect } from "react-redux";
 import {
   unfollow,
   follow,
-  setUsers,
   setCurrentPage,
-  setTotalUsersCount,
-  toggleIsFetching,
   toggleIsFollowingProgress,
+  getUsers,
 } from "../../Redux/Users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
 import { usersApi } from "../../api/api";
+
+//теперь UI у нас нfпрямую общается с BLL
 
 //контейнерная компонента которая делает ajax запросы к серверному API,отрисовывает презентац. компоненту
 class UsersContainer extends React.Component {
@@ -20,26 +21,12 @@ class UsersContainer extends React.Component {
   // componentDidMount это такие методы которые есть у объекта который, создан с помощью этого класса,
   // этот объект отвечает за компоненту и react взаимодействует с этим объектом
   componentDidMount() {
-    this.props.toggleIsFetching(true);
-    //вызываем getUsers из api.js
-    usersApi
-      .getUsers(this.props.currentPage, this.props.pageSize)
-      .then((data) => {
-        this.props.toggleIsFetching(false);
-        this.props.setUsers(data.items); //это и есть массив наших пользоват (response.data.items)
-        this.props.setTotalUsersCount(data.totalCount); //121  //количество пользователей
-      });
+    this.props.getUsers(this.props.currentPage, this.props.pageSize);
   }
 
   //Метод чтобы делать ajax запрос во время клика
   onPageChanged = (pageNumber) => {
-    this.props.setCurrentPage(pageNumber);
-    this.props.toggleIsFetching(true);
-
-    usersApi.getUsers(pageNumber, this.props.pageSize).then((data) => {
-      this.props.setUsers(data.items);
-      this.props.toggleIsFetching(false);
-    });
+    this.props.getUsers(pageNumber, this.props.pageSize);//getUsers вызывает calback который пришел от родителя
   };
 
   render() {
@@ -80,11 +67,9 @@ let mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   follow,
   unfollow,
-  setUsers,
   setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
-  setTotalUsersCount, //количество пользователей
-  toggleIsFetching,
   toggleIsFollowingProgress,
+  getUsers, //создается callback который внутри себя вызовит эту thunk и задиспачит ее результат
 })(UsersContainer);
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
