@@ -12,7 +12,7 @@ import Users from "./Users";
 import Preloader from "../common/Preloader";
 import { usersApi } from "../../api/api";
 
-//теперь UI у нас нfпрямую общается с BLL
+//теперь UI у нас нaпрямую общается с BLL
 
 //контейнерная компонента которая делает ajax запросы к серверному API,отрисовывает презентац. компоненту
 class UsersContainer extends React.Component {
@@ -20,13 +20,15 @@ class UsersContainer extends React.Component {
   //базоваяя задача,передать эти props,передать конструирование родительской компоненте (React.Component)
   // componentDidMount это такие методы которые есть у объекта который, создан с помощью этого класса,
   // этот объект отвечает за компоненту и react взаимодействует с этим объектом
+  //компонента через пропсы обращается к BLL
   componentDidMount() {
+    //сюда попадает не thunk a callback
     this.props.getUsers(this.props.currentPage, this.props.pageSize);
   }
 
   //Метод чтобы делать ajax запрос во время клика
   onPageChanged = (pageNumber) => {
-    this.props.getUsers(pageNumber, this.props.pageSize);//getUsers вызывает calback который пришел от родителя
+    this.props.getUsers(pageNumber, this.props.pageSize); //getUsers вызывает calback который пришел от родителя
   };
 
   render() {
@@ -44,7 +46,6 @@ class UsersContainer extends React.Component {
           users={this.props.users}
           unfollow={this.props.unfollow}
           follow={this.props.follow}
-          toggleIsFollowingProgress={this.props.toggleIsFollowingProgress}
           followingInProgress={this.props.followingInProgress}
         />
       </>

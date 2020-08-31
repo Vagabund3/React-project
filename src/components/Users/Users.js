@@ -3,6 +3,7 @@ import styles from "./users.module.css";
 import userPhoto from "../../assets/images/UsersAva.png";
 import { NavLink } from "react-router-dom";
 import Axios from "axios";
+import { usersApi } from "../../api/api";
 
 // чистая функциональная презентац. компонента
 //получает только данные из props и возвращает callback ниже
@@ -57,30 +58,13 @@ let Users = (props) => {
               {/* исп. тернарный оператор (? и :)
             когда кликнут,отработает callback функция (которую создает connect)
             и возьмет в пропсах follow или unfollow  и передаст туда id
-            в этих обработчиках делаем AJAX запросы
             */}
               {u.followed ? (
                 <button //если кто-нибудь в этом массиве равен u.id то тогда метод some вернет true или false
                   disabled={props.followingInProgress.some((id) => id === u.id)}
                   onClick={() => {
-                    props.toggleIsFollowingProgress(true, u.id); // перед запросом диспачим true
-                    //для отписки шлем delete запрос
-                    Axios.delete(
-                      `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
-                      {
-                        withCredentials: true,
-                        headers: {
-                          "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
-                        },
-                      }
-                    ).then((response) => {
-                      //сервер подтв. что подписка или отписка произошла
-                      //и мы должны задиспачить этот callback в reducer
-                      if (response.data.resultCode === 0) {
-                        props.unfollow(u.id);
-                      }
-                      props.toggleIsFollowingProgress(false, u.id); //когда запрос закончится то диспачим false
-                    });
+                    //во время onClick мы вызываем то что приходит из пропсов
+                    props.unfollow(u.id);
                   }}
                 >
                   Unfollow
@@ -89,23 +73,7 @@ let Users = (props) => {
                 <button
                   disabled={props.followingInProgress.some((id) => id === u.id)}
                   onClick={() => {
-                    props.toggleIsFollowingProgress(true, u.id);
-
-                    Axios.post(
-                      `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
-                      {},
-                      {
-                        withCredentials: true,
-                        headers: {
-                          "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
-                        },
-                      }
-                    ).then((response) => {
-                      if (response.data.resultCode === 0) {
-                        props.follow(u.id);
-                      }
-                      props.toggleIsFollowingProgress(false, u.id);
-                    });
+                    props.follow(u.id);
                   }}
                 >
                   Follow

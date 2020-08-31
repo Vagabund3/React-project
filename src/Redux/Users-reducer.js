@@ -99,8 +99,8 @@ const usersReducer = (state = initialState, action) => {
   }
 }; //map() возвращает новый массив на основе страрого массива
 
-export const follow = (userId) => ({ type: FOLLOW, userId });
-export const unfollow = (userId) => ({ type: UNFOLLOW, userId });
+export const followSuccess = (userId) => ({ type: FOLLOW, userId });
+export const unfollowSuccess = (userId) => ({ type: UNFOLLOW, userId });
 //action который будет SetАТЬ users-устанавливать users
 export const setUsers = (users) => ({ type: SET_USERS, users });
 export const setCurrentPage = (currentPage) => ({
@@ -123,15 +123,46 @@ export const toggleIsFollowingProgress = (isFetching, userId) => ({
   userId,
 });
 
-//thunkCreator функция которая что-то принемает и возвращать thunk
+//(thunkCreator) функция которая что-то принемает и возвращать thunk (функция возвращающая др. функц.)
+//все что нужно thunk из данных диспачим в (thunkCreator)
+//диспачим вызов ActionCreatorОВ
+//(thunkCreator) ниже. принимает в параметрах нужные данные
+//а потом возвращает саму thunk, потом через замыкание к этим данным может достучаться
+
 export const getUsers = (currentPage, pageSize) => {
-  return (dispatch) => {  
+  return (dispatch) => {
     dispatch(toggleIsFetching(true));
     //вызываем getUsers из api.js
     usersApi.getUsers(currentPage, pageSize).then((data) => {
       dispatch(toggleIsFetching(false)); //диспачим actions
       dispatch(setUsers(data.items)); //это и есть массив наших пользоват (response.data.items)
       dispatch(setTotalUsersCount(data.totalCount)); //121  //количество пользователей
+    });
+  };
+};
+export const follow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleIsFollowingProgress(true, userId)); // перед запросом диспачим true
+    usersApi
+      .follow(userId) //"посредник в виде DAL как на схеме"
+      .then((response) => {
+        //сервер подтв. что подписка или отписка произошла
+        //и мы должны задиспачить этот callback в reducer
+        if (response.data.resultCode === 0) {
+          dispatch(followSuccess(userId));
+        }
+        dispatch(toggleIsFollowingProgress(false, userId)); //когда запрос закончится то диспачим false
+      });
+  };
+};
+export const unfollow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleIsFollowingProgress(true, userId));
+    usersApi.unfollow(userId).then((response) => {
+      if (response.data.resultCode === 0) {
+        dispatch(unfollowSuccess(userId));
+      }
+      dispatch(toggleIsFollowingProgress(false, userId));
     });
   };
 };

@@ -1,4 +1,5 @@
 import * as Axios from "axios";
+import { follow, unfollow } from "../Redux/Users-reducer";
 
 // Создаем конкретный экземпляр AxiosA-(Instance)- это объекты которые содержат настройки по работе с конкретной API
 const instance = Axios.create({
@@ -26,21 +27,17 @@ export const usersApi = {
       .then((response) => {
         return response.data;
       });
+  }, 
+
+  follow(userId) {
+    return instance.post(
+      `https://social-network.samuraijs.com/api/1.0/follow/${userId}`
+    );
+  },
+
+  unfollow(userId) {
+    return instance.delete(
+      `https://social-network.samuraijs.com/api/1.0/follow/${userId}`
+    );
   },
 };
-
-
-
-      
-//     export const getUsers2 = (currentPage = 1, pageSize = 10) => {
-//   return instance
-//     .get(`follow?page=${currentPage}&count=${pageSize}`)
-//     .then((response) => {
-//       return response.data;
-//     });
-// };
-
-
-
- 
-  
