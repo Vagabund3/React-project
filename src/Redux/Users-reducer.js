@@ -123,11 +123,7 @@ export const toggleIsFollowingProgress = (isFetching, userId) => ({
   userId,
 });
 
-//(thunkCreator) функция которая что-то принемает и возвращать thunk (функция возвращающая др. функц.)
-//все что нужно thunk из данных диспачим в (thunkCreator)
-//диспачим вызов ActionCreatorОВ
-//(thunkCreator) ниже. принимает в параметрах нужные данные
-//а потом возвращает саму thunk, потом через замыкание к этим данным может достучаться
+//======================================================================= Thunk
 
 export const getUsers = (currentPage, pageSize) => {
   return (dispatch) => {

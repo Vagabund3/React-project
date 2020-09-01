@@ -1,3 +1,5 @@
+import { authApi, usersApi } from "../api/api";
+
 const ADD_POST = "ADD_POST";
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
@@ -69,4 +71,28 @@ export const setUserProfile = (profile) => ({
   profile,
 });
 
+
+//======================================================================= Thunk
+
+
+//(thunkCreator) функция которая что-то принемает и возвращать thunk (функция возвращающая др. функц.)
+//все что нужно thunk из данных диспачим в (thunkCreator)
+//диспачим вызов ActionCreatorОВ
+//(thunkCreator) ниже. принимает в параметрах нужные данные
+//а потом возвращает саму thunk, потом через замыкание к этим данным может достучаться
+
+export const getUsersProfile = (userId) => {
+  return (dispatch) => {
+    usersApi.getProfile(userId).then((response) => {
+      dispatch(setUserProfile(response.data)); //это и есть массив наших пользоват (response.data.items)
+    });
+  };
+};
+
 export default profileReducer;
+
+
+
+//пустой шаблон thunk
+// export const getAuthUserData = () => (dispatch) => {
+// }

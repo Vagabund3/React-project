@@ -3,7 +3,8 @@ import { follow, unfollow } from "../Redux/Users-reducer";
 
 // Создаем конкретный экземпляр AxiosA-(Instance)- это объекты которые содержат настройки по работе с конкретной API
 const instance = Axios.create({
-  withCredentials: true,
+  withCredentials: true, // в котором сидят настройки запроса,помогает узнать авторизованы или нет,помогает узнать авторизованы или нет.
+
   baseURL: "https://social-network.samuraijs.com/api/1.0/",
   headers: {
     "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
@@ -27,17 +28,27 @@ export const usersApi = {
       .then((response) => {
         return response.data;
       });
-  }, 
+  },
 
   follow(userId) {
-    return instance.post(
-      `https://social-network.samuraijs.com/api/1.0/follow/${userId}`
-    );
+    return instance.post(`follow/${userId}`);
   },
 
   unfollow(userId) {
-    return instance.delete(
-      `https://social-network.samuraijs.com/api/1.0/follow/${userId}`
-    );
+    return instance.delete(`follow/${userId}`);
+  },
+
+  getProfile(userId) {
+    // возвращаем тот промис который возвращ.get
+    return instance.get(`profile/` + userId);
+  },
+};
+
+//авторизация
+//auth me вернет нам результат отработки метода get
+//метода get у instance возвращает промис и на этот промис мы подписываемся методом .then в headerCont..
+export const authApi = {
+  me() {
+    return instance.get(`auth/me`);
   },
 };
