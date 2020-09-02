@@ -71,9 +71,7 @@ export const setUserProfile = (profile) => ({
   profile,
 });
 
-
 //======================================================================= Thunk
-
 
 //(thunkCreator) функция которая что-то принемает и возвращать thunk (функция возвращающая др. функц.)
 //все что нужно thunk из данных диспачим в (thunkCreator)
@@ -90,8 +88,6 @@ export const getUsersProfile = (userId) => {
 };
 
 export default profileReducer;
-
-
 
 //пустой шаблон thunk
 // export const getAuthUserData = () => (dispatch) => {

@@ -1,9 +1,8 @@
 import React from "react";
 import Profile from "./Profile";
-import Axios from "axios";
 import { connect } from "react-redux";
 import { getUsersProfile } from "../../Redux/Profile-reducer";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 
 // Чтобы React понимал и взвимодействовал с этим классом как с производителем компонент необходимо (extends)
 class ProfileContainer extends React.Component {
@@ -16,6 +15,7 @@ class ProfileContainer extends React.Component {
   }
 
   render() {
+    if (!this.props.isAuth) return <Redirect to={"/login"} />; //cм. в тетрадь. (!) - это оператор отрицания или NOT
     // берем props,раскрываем(...) и раскидываем как атрибуты для профиля
     // (Profile компонента)-презентационная получает объект Profile в props
     return <Profile {...this.props} profile={this.props.profile} />;
@@ -25,6 +25,7 @@ class ProfileContainer extends React.Component {
 let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
+    isAuth: state.auth.isAuth,
   };
 };
 

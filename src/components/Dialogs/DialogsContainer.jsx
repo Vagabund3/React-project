@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 let mapStateToProps = (state) => {
   return {
     dialogsPage: state.dialogsPage,
+    isAuth: state.auth.isAuth
   };
 };
 ////Все callbackИ, которые DispatchАТ что-то в state мы закидываем в mapDispatchToProps

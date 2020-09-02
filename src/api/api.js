@@ -44,7 +44,7 @@ export const usersApi = {
   },
 };
 
-//авторизация
+ //авторизация
 //auth me вернет нам результат отработки метода get
 //метода get у instance возвращает промис и на этот промис мы подписываемся методом .then в headerCont..
 export const authApi = {

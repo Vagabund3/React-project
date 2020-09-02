@@ -10,7 +10,6 @@ import {
 } from "../../Redux/Users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
-import { usersApi } from "../../api/api";
 
 //теперь UI у нас нaпрямую общается с BLL
 
