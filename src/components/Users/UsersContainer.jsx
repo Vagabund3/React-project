@@ -10,6 +10,7 @@ import {
 } from "../../Redux/Users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 
 //теперь UI у нас нaпрямую общается с BLL
 
@@ -64,13 +65,18 @@ let mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  follow,
-  unfollow,
-  setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
-  toggleIsFollowingProgress,
-  getUsers, //создается callback который внутри себя вызовит эту thunk и задиспачит ее результат
-})(UsersContainer);
+let withRedirect = withAuthRedirect(UsersContainer);
+
+//внутренним хуком получаем один контейнер а потом внешним хуком другой конт.
+export default withAuthRedirect(
+  connect(mapStateToProps, {
+    follow,
+    unfollow,
+    setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
+    toggleIsFollowingProgress,
+    getUsers, //создается callback который внутри себя вызовит эту thunk и задиспачит ее результат
+  })(UsersContainer)
+);
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!

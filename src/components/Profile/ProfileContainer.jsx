@@ -3,6 +3,7 @@ import Profile from "./Profile";
 import { connect } from "react-redux";
 import { getUsersProfile } from "../../Redux/Profile-reducer";
 import { withRouter, Redirect } from "react-router-dom";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 
 // Чтобы React понимал и взвимодействовал с этим классом как с производителем компонент необходимо (extends)
 class ProfileContainer extends React.Component {
@@ -15,21 +16,25 @@ class ProfileContainer extends React.Component {
   }
 
   render() {
-    if (!this.props.isAuth) return <Redirect to={"/login"} />; //cм. в тетрадь. (!) - это оператор отрицания или NOT
     // берем props,раскрываем(...) и раскидываем как атрибуты для профиля
     // (Profile компонента)-презентационная получает объект Profile в props
     return <Profile {...this.props} profile={this.props.profile} />;
   }
 }
 
+//см в тетради 13 стр.
+let AuthRedirectComponent = withAuthRedirect(ProfileContainer);
+//основной connect. Берет только данные из профиля
 let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
-    isAuth: state.auth.isAuth,
   };
 };
 
-let WithUrlDataContainerComponent = withRouter(ProfileContainer);
+
+;
+
+let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent);
 
 export default connect(mapStateToProps, { getUsersProfile })(
   WithUrlDataContainerComponent
@@ -37,3 +42,4 @@ export default connect(mapStateToProps, { getUsersProfile })(
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!
+// про HOC и его логику дополнительно см. в withAuthRedirect
