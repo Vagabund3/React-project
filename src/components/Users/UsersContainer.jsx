@@ -11,6 +11,7 @@ import {
 import Users from "./Users";
 import Preloader from "../common/Preloader";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 //теперь UI у нас нaпрямую общается с BLL
 
@@ -65,18 +66,20 @@ let mapStateToProps = (state) => {
   };
 };
 
-let withRedirect = withAuthRedirect(UsersContainer);
+//===============================HOC=======================================================================
 
-//внутренним хуком получаем один контейнер а потом внешним хуком другой конт.
-export default withAuthRedirect(
+//см. комменты в DialogsContainer!!!
+export default compose(
+  withAuthRedirect,
   connect(mapStateToProps, {
     follow,
     unfollow,
     setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
     toggleIsFollowingProgress,
     getUsers, //создается callback который внутри себя вызовит эту thunk и задиспачит ее результат
-  })(UsersContainer)
-);
+  })
+)(UsersContainer);
+//===============================HOC=======================================================================
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!

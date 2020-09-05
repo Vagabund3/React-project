@@ -6,6 +6,7 @@ import { updateNewMessageBody, sendMessage } from "../../Redux/Dialogs-reducer";
 import Dialogs from "./Dialogs";
 import { connect } from "react-redux";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 //компонента должна получать только данные и callbacku
 
@@ -57,16 +58,20 @@ let mapStateToProps = (state) => {
 //главное что каждый слой добавляет свое поведение
 //в конечном итоге нарисуется наша целивая компонента (так работае hoc)
 
-//см в тетради 13 стр.
-let AuthRedirectComponent = withAuthRedirect(Dialogs);
+//compose вернул нам функцию и мы вызываем ту функцию которую он вернул
+//compose аватоматически возьмет Dialogs и закинет его в вызов функции withAuthRedirect
+//потом возьмет результат выполнения этой функции и перекинет в ледующ.функцию (connect)
+//получается что вызываем connect,он возвращает HOC и потом в этот HOC закидываем нашу компоненту
+export default compose(
+  connect(mapStateToProps, {
+    // 3. и этот результат закинь сюда
+    sendMessage,
+    updateNewMessageBody,
+  }),
+  withAuthRedirect // 2. закидывает его в эту функцию,потом получи результат
+)(Dialogs); //ход выполнения. 1. сompose берет Dialogs
 
 //==========================================================================================================
-
-export default connect(mapStateToProps, {
-  sendMessage,
-  updateNewMessageBody,
-})(AuthRedirectComponent);
-
 //инфу o store вынесли в контейнерную компоненту
 //Весь смысл контейнерной компоненты просто быть оберткой и снабдить данными презентационную компоненту. ту Dialogs.jsx,
 // для обычной-функциональной компоненты в нашем случае Dialogs.jsx

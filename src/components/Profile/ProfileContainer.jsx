@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getUsersProfile } from "../../Redux/Profile-reducer";
 import { withRouter, Redirect } from "react-router-dom";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 // Чтобы React понимал и взвимодействовал с этим классом как с производителем компонент необходимо (extends)
 class ProfileContainer extends React.Component {
@@ -22,8 +23,7 @@ class ProfileContainer extends React.Component {
   }
 }
 
-//см в тетради 13 стр.
-let AuthRedirectComponent = withAuthRedirect(ProfileContainer);
+
 //основной connect. Берет только данные из профиля
 let mapStateToProps = (state) => {
   return {
@@ -31,14 +31,16 @@ let mapStateToProps = (state) => {
   };
 };
 
+//===============================HOC=======================================================================
 
-;
+//см. комменты в DialogsContainer!!!
+export default compose(
+  connect(mapStateToProps, { getUsersProfile }),
+  withRouter,
+  withAuthRedirect
+)(ProfileContainer);
+//===============================HOC=======================================================================
 
-let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent);
-
-export default connect(mapStateToProps, { getUsersProfile })(
-  WithUrlDataContainerComponent
-);
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!
