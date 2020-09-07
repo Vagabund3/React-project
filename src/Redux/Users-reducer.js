@@ -123,7 +123,7 @@ export const toggleIsFollowingProgress = (isFetching, userId) => ({
   userId,
 });
 
-//======================================================================= Thunk
+//================================Thunk======================================= 
 
 export const getUsers = (currentPage, pageSize) => {
   return (dispatch) => {
