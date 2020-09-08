@@ -1,8 +1,10 @@
-import { authApi, usersApi } from "../api/api";
+import { authApi, usersApi, profileApi } from "../api/api";
 
 const ADD_POST = "ADD_POST";
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
+const SET_STATUS = "SET_STATUS";
+
 //Инициализирует profileReducer в случае если state не прийдет в функцию
 let initialState = {
   posts: [
@@ -12,6 +14,7 @@ let initialState = {
   ],
   newPostText: "Вводи текст здесь",
   profile: null,
+  status: "",
 };
 //Reducer принимает state и action преобразовывает и возвращает преобразованный state
 //приходит не весь state а только та часть которая нужна конкретному Reducer
@@ -48,6 +51,12 @@ const profileReducer = (state = initialState, action) => {
         profile: action.profile,
       };
     }
+    case SET_STATUS: {
+      return {
+        ...state,
+        status: action.status,
+      };
+    }
 
     default:
       return state; // case по умолчанию
@@ -70,8 +79,9 @@ export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile,
 });
+export const setStatus = (status) => ({ type: SET_STATUS, status });
 
-//===================================Thunk==================================== 
+//===================================Thunk====================================
 
 //(thunkCreator) функция которая что-то принемает и возвращать thunk (функция возвращающая др. функц.)
 //все что нужно thunk из данных диспачим в (thunkCreator)
@@ -83,6 +93,27 @@ export const getUsersProfile = (userId) => {
   return (dispatch) => {
     usersApi.getProfile(userId).then((response) => {
       dispatch(setUserProfile(response.data)); //это и есть массив наших пользоват (response.data.items)
+    });
+  };
+};
+
+export const getStatus = (userId) => {
+  return (dispatch) => {
+    profileApi.getStatus(userId).then((response) => {
+      dispatch(setStatus(response.data));
+    });
+  };
+};
+
+//thunk которая будет слать запрос на сервак чтобы обновить статус
+//тот status который сюда пришел-(первая строчка) мы его сетаем(setStatus) чтобы его отобразить
+export const updateStatus = (status) => {
+  return (dispatch) => {
+    profileApi.updateStatus(status).then((response) => {
+      //если resultCode 1 то какая-то ощибка, если 0 о то все ок
+      if (response.data.resultCode === 0) {
+        dispatch(setStatus(status));
+      }
     });
   };
 };

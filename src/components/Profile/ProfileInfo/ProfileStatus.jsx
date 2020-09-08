@@ -8,24 +8,25 @@ class ProfileStatus extends React.Component {
   };
 
   //метод для обработки onDoubleClick
-  activateEditMode() {
+  activateEditMode = () => {
     this.setState({
       editMode: true,
     });
-  }
+    this.props.updateStatus()
+  };
 
-  deactivateEditMode() {
+  deactivateEditMode = () => {
     this.setState({
       editMode: false,
     });
-  }
+  };
 
   render() {
     return (
       <div>
         {!this.state.editMode && ( //если не editMode(!) то отобразим span
           <div>
-            <span onDoubleClick={this.activateEditMode.bind(this)}>
+            <span onDoubleClick={this.activateEditMode}>
               {this.props.status}
             </span>
           </div>
@@ -34,7 +35,7 @@ class ProfileStatus extends React.Component {
           <div>
             <input
               autoFocus={true} //input когда активируется,он заберет фокус на себя
-              onBlur={this.deactivateEditMode.bind(this)} //onBlur фокус в эллементе
+              onBlur={this.deactivateEditMode} //onBlur фокус в эллементе
               value={this.props.status}
             />
           </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import Profile from "./Profile";
 import { connect } from "react-redux";
-import { getUsersProfile } from "../../Redux/Profile-reducer";
+import { getUsersProfile,getStatus,updateStatus } from "../../Redux/Profile-reducer";
 import { withRouter, Redirect } from "react-router-dom";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
@@ -14,20 +14,29 @@ class ProfileContainer extends React.Component {
       userId = 2;
     }
     this.props.getUsersProfile(userId);
+    this.props.getStatus(userId); //запрос на статус
+    
   }
 
   render() {
     // берем props,раскрываем(...) и раскидываем как атрибуты для профиля
     // (Profile компонента)-презентационная получает объект Profile в props
-    return <Profile {...this.props} profile={this.props.profile} />;
+    return (
+      <Profile
+        {...this.props}
+        profile={this.props.profile}
+        status={this.props.status}
+        updateStatus={this.props.updateStatus}
+      />
+    );
   }
 }
-
 
 //основной connect. Берет только данные из профиля
 let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
+    status: state.profilePage.status,
   };
 };
 
@@ -35,12 +44,11 @@ let mapStateToProps = (state) => {
 
 //см. комменты в DialogsContainer!!!
 export default compose(
-  connect(mapStateToProps, { getUsersProfile }),
-  withRouter,
+  connect(mapStateToProps, { getUsersProfile, getStatus, updateStatus }),
+  withRouter
   // withAuthRedirect
 )(ProfileContainer);
 //===============================HOC=======================================================================
-
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!

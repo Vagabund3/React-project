@@ -38,13 +38,28 @@ export const usersApi = {
     return instance.delete(`follow/${userId}`);
   },
 
+  //backward compatibility
   getProfile(userId) {
-    // возвращаем тот промис который возвращ.get
-    return instance.get(`profile/` + userId);
+    console.warn("Obsolete method. Please profileApi object.");
+    return profileApi.getProfile(userId);
   },
 };
 
- //авторизация
+export const profileApi = {
+  getProfile(userId) {
+    return instance.get(`profile/` + userId);
+  },
+  getStatus(userId) {
+    return instance.get(`profile/status/` + userId);
+  },
+  updateStatus(status) {
+    return instance.put(`profile/status`, {
+      status: status, //отправляем на сервак объект у которого есть св-во status, см.документацию put запрос
+    });
+  },
+};
+
+//авторизация
 //auth me вернет нам результат отработки метода get
 //метода get у instance возвращает промис и на этот промис мы подписываемся методом .then в headerCont..
 export const authApi = {
