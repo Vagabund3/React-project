@@ -1,7 +1,11 @@
 import React from "react";
 import Profile from "./Profile";
 import { connect } from "react-redux";
-import { getUsersProfile,getStatus,updateStatus } from "../../Redux/Profile-reducer";
+import {
+  getUsersProfile,
+  getStatus,
+  updateStatus,
+} from "../../Redux/Profile-reducer";
 import { withRouter, Redirect } from "react-router-dom";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
@@ -11,11 +15,11 @@ class ProfileContainer extends React.Component {
   componentDidMount() {
     let userId = this.props.match.params.userId;
     if (!userId) {
-      userId = 2;
+      userId = 11007
+      ;
     }
     this.props.getUsersProfile(userId);
     this.props.getStatus(userId); //запрос на статус
-    
   }
 
   render() {
