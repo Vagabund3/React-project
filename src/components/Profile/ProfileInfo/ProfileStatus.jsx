@@ -27,7 +27,17 @@ class ProfileStatus extends React.Component {
     this.setState({ status: e.currentTarget.value });
   };
 
+  //cm. тетрадь на 18 стр.
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.status != this.props.status) {
+      this.setState({
+        status: this.props.status,
+      });
+    }
+  }
+
   render() {
+    console.log("render");
     return (
       <div>
         {!this.state.editMode && ( //если не editMode(!) то отобразим span
