@@ -5,6 +5,7 @@ import profileReducer from "./Profile-reducer";
 import usersReducer from "./Users-reducer";
 import authReducer from "./auth-reducer ";
 import thunkMiddleware from "redux-thunk";
+import { reducer as formReducer } from "redux-form";
 
 //Фукция которая объединяет все reducer
 //ветки голобального state
@@ -14,6 +15,7 @@ let reducers = combineReducers({
   sidebar: sidebarReducer,
   usersPage: usersReducer,
   auth: authReducer,
+  form: formReducer,
 });
 
 let store = createStore(reducers, applyMiddleware(thunkMiddleware)); //в скобках передаем Middleware которую хотим внедрить

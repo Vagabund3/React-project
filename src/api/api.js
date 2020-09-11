@@ -1,5 +1,4 @@
 import * as Axios from "axios";
-import { follow, unfollow } from "../Redux/Users-reducer";
 
 // Создаем конкретный экземпляр AxiosA-(Instance)- это объекты которые содержат настройки по работе с конкретной API
 const instance = Axios.create({
