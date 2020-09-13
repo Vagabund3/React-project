@@ -3,6 +3,7 @@ import s from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import { Redirect } from "react-router-dom";
+import { Field, reduxForm } from "redux-form";
 
 const Dialogs = (props) => {
   let state = props.dialogsPage;
@@ -10,48 +11,46 @@ const Dialogs = (props) => {
   let dialogsElements = state.dialogs.map((d) => (
     <DialogItem name={d.name} key={d.id} id={d.id} />
   ));
-
   let messagesElements = state.messages.map((m) => (
     <Message message={m.message} key={m.id} />
   ));
 
-  let newMessageBody = state.newMessageBody;
-  //хотим сообщить что мы нажали кнопку,значит нужно отправить сообщение
-  let onSendMessageClick = () => {
-    props.sendMessage();
+  let addNewMessage = (values) => {
+    props.sendMessage(values.newMessageBody);
   };
 
-  let onNewMessageChange = (e) => {
-    let body = e.target.value;
-    props.updateNewMessageBody(body);
-  };
+  if (!props.isAuth) return <Redirect to={"/login"} />;
 
   return (
     <div className={s.dialogs}>
       <div className={s.dialogsItems}>{dialogsElements}</div>
       <div className={s.messages}>
         <div>{messagesElements}</div>
-        <div>
-          <div>
-            {/* // Любые значения которые отбражаються в UI - нужно фиксировать, 
-            //эти значения должны приходить из propsОВ. */}
-            <textarea
-              value={newMessageBody}
-              onChange={onNewMessageChange} //эту функцию вызывает textarea
-              // Чтобы newMessageBody каждый раз менялся и приходил другой необходимо событие onChange,
-              // когда мы что-то вводим оно срабатывает внутри этого события как в этом примере:{onNewMessageChange}, делаем Dicpanch
-              //  в BLL, BLL там меняеться, к нам приходят новые Props с новым value и новый value отображаеться.
-              placeholder="Enter your message"
-            ></textarea>
-          </div>
-          <div>
-            {/*кнопка вызывает функцию onSendMessageClick */}
-            <button onClick={onSendMessageClick}>Send</button>
-          </div>
-        </div>
       </div>
+      <AddMessageFormRedux onSubmit={addNewMessage} />
     </div>
   );
 };
+
+const AddMessageForm = (props) => {
+  return (
+    <form onSubmit={props.handleSubmit}>
+      <div>
+        <Field
+          component="textarea"
+          name="newMessageBody"
+          placeholder="Enter your message"
+        />
+      </div>
+      <div>
+        <button>Send</button>
+      </div>
+    </form>
+  );
+};
+
+const AddMessageFormRedux = reduxForm({ form: "dialogAddMessageForm" })(
+  AddMessageForm
+);
 
 export default Dialogs;
