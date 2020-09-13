@@ -1,7 +1,7 @@
 import React from "react";
 import s from "./MyPosts.module.css";
 import Post from "./Post/Post";
-
+import { reduxForm, Field } from "redux-form";
 
 //компонента должна получать данные и callbackИ
 const MyPosts = (props) => {
@@ -10,40 +10,41 @@ const MyPosts = (props) => {
   ));
   let newPostElement = React.createRef();
 
-  // onPostChange и onAddPost это callbackИ
-  //этот addPost идет на onClick,который находиться ниже
-  let onAddPost = () => {
-    props.addPost();
-  };
-
-  let onPostChange = () => {
-    let text = newPostElement.current.value;
-    //вызываем из пропсов и передаем внутрь текст в MyPostsContainer.jsx
-    props.updateNewPostText(text);
+  // onAddPost это callback в values сидит newPostText
+  let onAddPost = (values) => {
+    props.addPost(values.newPostText);
   };
 
   return (
     <div className={s.postsBlock}>
       <h3>My posts</h3>
-      <div>
-        <div>
-          <textarea
-            onChange={onPostChange}
-            ref={newPostElement}
-            value={props.newPostText}
-          />
-        </div>
-        <div>
-          {/* когда происходит onClick вызывается функция addPost из пропсов, см выше */}
-          <button onClick={onAddPost}>Add post</button>
-        </div>
-      </div>
       <div className={s.posts}>{postsElements}</div>
+      <AddNewPostFormRedux onSubmit={onAddPost} />{" "}
+      {/*когда в форме будет Submit-соберет для нас данные, форма вызовет callback который мы ей передадим */}
     </div>
   );
 };
 
+const AddNewPostForm = (props) => {
+  return (
+    <form onSubmit={props.handleSubmit}>
+      <div>
+        <Field name="newPostText" component="textarea" />
+      </div>
+      <div>
+        <button>Add post</button>
+      </div>
+    </form>
+  );
+};
+
+const AddNewPostFormRedux = reduxForm({form:"ProfileAddNewPostForm" })(
+  AddNewPostForm
+);
+
 export default MyPosts;
 
 //если не понимаешь то включи 44 ролик с 25 минуты
- 
+
+//   !!! каждый шаг см. комменты и в тетради стр 20-23 !!!
+

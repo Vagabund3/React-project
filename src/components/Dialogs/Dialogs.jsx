@@ -54,3 +54,6 @@ const AddMessageFormRedux = reduxForm({ form: "dialogAddMessageForm" })(
 );
 
 export default Dialogs;
+
+
+//   !!! каждый шаг см. комменты и в тетради стр 20-23 !!!

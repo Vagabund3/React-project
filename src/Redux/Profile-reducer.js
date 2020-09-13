@@ -1,7 +1,6 @@
 import { authApi, usersApi, profileApi } from "../api/api";
 
 const ADD_POST = "ADD_POST";
-const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
 const SET_STATUS = "SET_STATUS";
 
@@ -12,7 +11,6 @@ let initialState = {
     { id: 2, message: "Хочешь знать в какой?", likesCount: 23 },
     { id: 3, message: "Капитал прожиточного минимума", likesCount: 133 },
   ],
-  newPostText: "Вводи текст здесь",
   profile: null,
   status: "",
 };
@@ -25,7 +23,7 @@ const profileReducer = (state = initialState, action) => {
     case ADD_POST: {
       let newPost = {
         id: 5,
-        message: state.newPostText,
+        message: action.newPostText,
         likesCount: 0,
       };
       // Для чего нужно копирование и как работпет  см 48 с 21 мин.
@@ -37,13 +35,7 @@ const profileReducer = (state = initialState, action) => {
         newPostText: "",
       };
     }
-    case UPDATE_NEW_POST_TEXT: {
-      //также копируем
-      return {
-        ...state,
-        newPostText: action.newText,
-      };
-    }
+   
     case SET_USER_PROFILE: {
       return {
         ...state,
@@ -70,11 +62,11 @@ const profileReducer = (state = initialState, action) => {
 // addPostActionCreator вспомогательная функция которая помогает не ошибиться в создании Action
 //ActionCreator необходимо создавать чтобы их заДиспачить (dispatch)
 //ActionCreator пользуються пользователи UI
-export const addPost = () => ({ type: ADD_POST });
-export const updateNewPostText = (text) => ({
-  type: UPDATE_NEW_POST_TEXT,
-  newText: text,
+export const addPostCreator = (newPostText) => ({
+  type: ADD_POST,
+  newPostText,
 });
+
 export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile,
