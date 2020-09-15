@@ -7,7 +7,7 @@ import {
   maxLengthCreator,
   required,
 } from "../../../utils/validators/validators";
-import { Textarea } from "../../FormsControls/FormsControls";
+import { Textarea } from "../../common/FormsControls/FormsControls";
 
 //компонента должна получать данные и callbackИ
 const MyPosts = (props) => {
