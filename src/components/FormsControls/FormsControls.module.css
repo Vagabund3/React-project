@@ -1,0 +1,8 @@
+/* //если внутри formControl есть класс error и внутри лежит input */
+.formControl.error input,
+.formControl.error textarea {
+  border: solid red 2px;
+}
+
+.formControl.error span {
+color: red;}
