@@ -35,7 +35,7 @@ const profileReducer = (state = initialState, action) => {
         newPostText: "",
       };
     }
-   
+
     case SET_USER_PROFILE: {
       return {
         ...state,
@@ -75,8 +75,8 @@ export const setStatus = (status) => ({ type: SET_STATUS, status });
 
 //===================================Thunk====================================
 
-//(thunkCreator) функция которая что-то принемает и возвращает thunk (функция возвращающая др. функц.)
-//все что нужно thunk из данных диспачим в (thunkCreator)
+//Thunk-функция которая принемает-(метод dispatch) все что нужно thunk из данных диспачим в (thunkCreator)
+//(thunkCreator) функция которая что-то принемает и возвращает thunk (функция возвращающая др. функц. благодаря замыканию)
 //диспачим вызов ActionCreatorОВ
 //(thunkCreator) ниже. принимает в параметрах нужные данные
 //а потом возвращает саму thunk, потом через замыкание к этим данным может достучаться
