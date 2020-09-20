@@ -3,8 +3,9 @@ import * as Axios from "axios";
 // Создаем конкретный экземпляр AxiosA-(Instance)- это объекты которые содержат настройки по работе с конкретной API
 const instance = Axios.create({
   withCredentials: true, // в котором сидят настройки запроса,помогает узнать авторизованы или нет
+  baseURL: 'https://social-network.samuraijs.com/api/1.0/',
   headers: {
-    "API-KEY": "970d33ed-72c4-40d8-a0e3-60b5a333afee",
+    "API-KEY": "7ecb0c6c-b2cc-43f2-b68e-676d06268d2b",//7ecb0c6c-b2cc-43f2-b68e-676d06268d2b
   },
 });
 
@@ -63,12 +64,10 @@ export const authApi = {
   me() {
     return instance.get(`auth/me`);
   },
-
   login(email, password, rememberMe = false) {
-    return instance.post(`auth/login`,{email, password, rememberMe}); //вместе c post запросом на сервак мы отпр. данные
+    return instance.post(`auth/login`, { email, password, rememberMe });
   },
   logout() {
-    return instance.delete(`auth/login`); //вместе c post запросом на сервак мы отпр. данные
+    return instance.delete(`auth/login`); //сервак удаляет куки
   },
 };
- 

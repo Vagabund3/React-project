@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./Header";
 import { connect } from "react-redux";
-import { getAuthUserData } from "../../Redux/auth-reducer ";
+import { getAuthUserData, logout } from "../../Redux/auth-reducer ";
 
 class HeaderContainer extends React.Component {
   componentDidMount() {
@@ -18,7 +18,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getAuthUserData })(HeaderContainer);
+export default connect(mapStateToProps, { getAuthUserData, logout })(
+  HeaderContainer
+);
 
 // создаем еще одну контейнерную компоненту (mapStateToProps) с помощью Функции connect
 //   !!! каждый шаг см. комменты в DialogsContainer!!!

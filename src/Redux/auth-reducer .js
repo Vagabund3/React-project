@@ -3,7 +3,7 @@ import { authApi } from "../api/api";
 const SET_USER_DATA = "SET_USER_DATA";
 
 let initialState = {
-  id: null,
+  userId: null,
   email: null,
   login: null,
   isAuth: false, //еси true то показываем login (булево значение)
@@ -17,17 +17,16 @@ const authReducer = (state = initialState, action) => {
         ...state,
         // в data сидят объекты из initialState
         ...action.payload,
-        //если пришли пользовательские данные,isAuth делаем true
-        isAuth: true,
       };
+
     default:
       return state;
   }
 };
 
-export const setAuthUserData = (userid, email, login, isAuth) => ({
+export const setAuthUserData = (userId, email, login, isAuth) => ({
   type: SET_USER_DATA,
-  payload: { userid, email, login, isAuth },
+  payload: { userId, email, login, isAuth },
 });
 
 //===================================Thunk====================================
@@ -47,15 +46,16 @@ export const getAuthUserData = () => (dispatch) => {
 export const login = (email, password, rememberMe) => (dispatch) => {
   authApi.login(email, password, rememberMe).then((response) => {
     if (response.data.resultCode === 0) {
-      dispatch(getAuthUserData());
+      dispatch(getAuthUserData()); //Диспачим thunk чтобы получить инфу обо мне
     }
   });
 };
 
+//когда делается logout сервак удаляет cookie и мы должны зачистить состояние
 export const logout = () => (dispatch) => {
   authApi.logout().then((response) => {
     if (response.data.resultCode === 0) {
-      dispatch(getAuthUserData(null, null, null, false));
+      dispatch(setAuthUserData(null, null, null, false)); // делается logout должны занулить все что знали о пользователе
     }
   });
 };
