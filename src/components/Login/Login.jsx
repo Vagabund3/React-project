@@ -5,6 +5,7 @@ import { reduxForm, Field } from "redux-form";
 import { required } from "../../utils/validators/validators";
 import { Input } from "../common/FormsControls/FormsControls";
 import { login } from "../../Redux/auth-reducer ";
+import style from "./../common/FormsControls/FormsControls.module.css";
 
 const LoginForm = (props) => {
   return (
@@ -39,6 +40,10 @@ const LoginForm = (props) => {
         />
         Remember me
       </div>
+      {/* //показываем props.error только тогда когда есть ошибка */}
+      {props.error && <div className={style.formSummaryError}>
+      {props.error}
+        </div>}
       <div>
         <button>Login</button>
       </div>
@@ -66,7 +71,8 @@ const Login = (props) => {
     </div>
   );
 };
-const mapStateToProps = (state) => ({//возвращ объект
+const mapStateToProps = (state) => ({
+  //возвращ объект
   isAuth: state.auth.isAuth,
 });
 

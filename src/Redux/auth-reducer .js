@@ -45,14 +45,15 @@ export const getAuthUserData = () => (dispatch) => {
 };
 
 export const login = (email, password, rememberMe) => (dispatch) => {
-  let action = stopSubmit("login", { email: "Email is  wrong" });
-  dispatch(action);
-  return;
-
   authApi.login(email, password, rememberMe).then((response) => {
     if (response.data.resultCode === 0) {
       dispatch(getAuthUserData()); //Диспачим thunk чтобы получить инфу обо мне
     } else {
+      let message =
+        response.data.messages.length > 0
+          ? response.data.messages[0]
+          : "Some error";
+      dispatch(stopSubmit("login", { _error: message })); //проблемное поле которое вызвало ошибку(stopSubmit)) cтр 26!!!
     }
   });
 };
