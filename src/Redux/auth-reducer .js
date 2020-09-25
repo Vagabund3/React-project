@@ -34,7 +34,7 @@ export const setAuthUserData = (userId, email, login, isAuth) => ({
 
 export const getAuthUserData = () => (dispatch) => {
   authApi
-    .me() //me() никакие параменты не принимат поэтому (значит для запроса не нужно ничего знать) в thunCreator()- ничего не передаем
+    .me() //по факту me() возвращает нам промис и мы на него thenМся (любой then тоже возвращает промис)  //me() никакие параменты не принимат поэтому (значит для запроса не нужно ничего знать) в thunCreator()- ничего не передаем
     .then((response) => {
       //если if то в этом случае мы залогинены и диспачим эти авторизационные данные
       if (response.data.resultCode === 0) {

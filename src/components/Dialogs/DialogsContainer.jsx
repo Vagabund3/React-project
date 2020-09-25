@@ -66,7 +66,7 @@ let mapDispatchToProps = (dispatch) => {
 
 //compose вернул нам функцию и мы вызываем ту функцию которую он вернул
 //compose аватоматически возьмет Dialogs и закинет его в вызов функции withAuthRedirect
-//потом возьмет результат выполнения этой функции и перекинет в ледующ.функцию (connect)
+//потом возьмет результат выполнения этой функции и перекинет в следующ.функцию (connect)
 //получается что вызываем connect,он возвращает HOC и потом в этот HOC закидываем нашу компоненту
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
