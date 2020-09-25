@@ -2,8 +2,6 @@ import React from "react";
 import styles from "./users.module.css";
 import userPhoto from "../../assets/images/UsersAva.png";
 import { NavLink } from "react-router-dom";
-import Axios from "axios";
-import { usersApi } from "../../api/api";
 
 // чистая функциональная презентац. компонента
 //получает только данные из props и возвращает callback ниже

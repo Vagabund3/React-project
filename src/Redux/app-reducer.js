@@ -2,7 +2,7 @@ import { authApi } from "../api/api";
 import { stopSubmit } from "redux-form";
 import { getAuthUserData } from "./auth-reducer ";
 
-const INITIALIZED_SUCCESS = "INITIALIZED_SUCCESS";
+const INITIALIZED_SUCCESS  = "INITIALIZED_SUCCESS";
 
 let initialState = {
   initialized: false, //сначала приложение не инициализировано
@@ -28,10 +28,11 @@ export const initializedSuccess = () => ({ type: INITIALIZED_SUCCESS });
 //Thunk для инициализации
 export const initializeApp = () => (dispatch) => {
   let promise = dispatch(getAuthUserData()); //диспачим получение инициализационных данных  и когда эти данные будут получены, возвращаем промис из auth-reducer(thunk getAuthUserData)
-//когда пройдет resolve тогда значит асинхронная операция закончена и инициализ. завершена и говорим succsess
-  promise.then(() => {
-  dispatch(initializedSuccess()); // мы должны диспачить initializedSuccess
-  });
+  //когда пройдет resolve тогда значит асинхронная операция закончена и инициализ. завершена и говорим succsess
+  Promise.all([promise]) //если будет несколько промисов тогда  Promise.all
+    .then(() => {
+      dispatch(initializedSuccess()); // мы должны диспачить initializedSuccess
+    });
 };
 
 export default appReducer;

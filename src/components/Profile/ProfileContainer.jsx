@@ -6,8 +6,7 @@ import {
   getStatus,
   updateStatus,
 } from "../../Redux/Profile-reducer";
-import { withRouter, Redirect } from "react-router-dom";
-import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 
 // Чтобы React понимал и взвимодействовал с этим классом как с производителем компонент необходимо (extends)
@@ -16,6 +15,10 @@ class ProfileContainer extends React.Component {
     let userId = this.props.match.params.userId;
     if (!userId) {
       userId = this.props.authorizedUserId; //11007 //11582
+      if (!userId) {
+        //если userId нет то тогда Redirect на логин
+        this.props.history.push("/login"); //Redirect создавали с помошью компоненты здесь не можем сделать,поэтому делаем так: В пропсах есть объект history и у него есть метод push который можно вызвать и в history можем pushИТЬ новый path(путь) и у нас перейдет переход на новую страницу
+      }
     }
     this.props.getUsersProfile(userId);
     this.props.getStatus(userId); //запрос на статус
@@ -36,14 +39,12 @@ class ProfileContainer extends React.Component {
 }
 
 //основной connect. Берет только данные из профиля
-let mapStateToProps = (state) => {
-  return {
-    profile: state.profilePage.profile,
-    status: state.profilePage.status,
-    authorizedUserId: state.auth.userId,
-    isAuth: state.auth.isAuth,
-  };
-};
+let mapStateToProps = (state) => ({
+  profile: state.profilePage.profile,
+  status: state.profilePage.status,
+  authorizedUserId: state.auth.userId,
+  isAuth: state.auth.isAuth,
+});
 
 //===============================HOC=======================================================================
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { BrowserRouter, Route, withRouter } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import News from "./components/News/News";
 import Video from "./components/Video/Video";
 import Settings from "./components/Settings/Settings";
@@ -12,9 +12,7 @@ import HeaderContainer from "./components/Header/HeaderContainer";
 import LoginPage from "./components/Login/Login";
 import { connect } from "react-redux";
 import { initializeApp } from "./Redux/app-reducer";
-
 import { compose } from "redux";
-import { initialize } from "redux-form";
 import Preloader from "./components/common/Preloader/Preloader";
 
 class App extends Component {
@@ -22,10 +20,11 @@ class App extends Component {
     this.props.initializeApp();
   }
   render() {
-    //если не про
-    if (!this.props.initialize) {
-     return <Preloader /> 
+    //если не проиниц. то вернем Preloader
+    if (!this.props.initialized) {
+      return <Preloader />;
     }
+
     return (
       <div className="app-wrapper">
         <HeaderContainer />
@@ -52,11 +51,14 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  initialize: state.app.initialized; //на это initialize будем равнятся в return который выше
+const mapStateToProps = (state) => ({
+  initialized: state.app.initialized, //на это initialize будем равнятся в return который выше
   //то есть мы будем возвращать всю разметку только тогда когда мы проинициализировались
-};
+});
 
-export default compose(withRouter, connect(null, { initializeApp }))(App); //диспачим thunk initializeApp
+export default compose(
+  withRouter,
+  connect(mapStateToProps, { initializeApp })
+)(App); //диспачим thunk initializeApp
 
 //cм стр 28(getAuthUserData)
