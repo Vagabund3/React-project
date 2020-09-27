@@ -6,12 +6,20 @@ import {
   follow,
   setCurrentPage,
   toggleIsFollowingProgress,
-  getUsers,
+  requestUsers,
 } from "../../Redux/Users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
+import {
+  getCurrentPage,
+  getFollowingInProgress,
+  getIsFetching,
+  getPageSize,
+  getTotalUsersCount,
+  getUsers,
+} from "../../Redux/users-selectors";
 
 //теперь UI у нас нaпрямую общается с BLL
 
@@ -53,15 +61,27 @@ class UsersContainer extends React.Component {
   }
 }
 
+// let mapStateToProps = (state) => {
+//   return {
+//     //значения из initialState
+//     users: state.usersPage.users,
+//     pageSize: state.usersPage.pageSize,
+//     totalUsersCount: state.usersPage.totalUsersCount,
+//     currentPage: state.usersPage.currentPage,
+//     isFetching: state.usersPage.isFetching,
+//     followingInProgress: state.usersPage.followingInProgress,
+//   };
+// };
+
 let mapStateToProps = (state) => {
   return {
-    //значения из initialState
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    followingInProgress: state.usersPage.followingInProgress,
+    //значения из initialState-cелекторы из user-reducers
+    users: getUsers(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    followingInProgress: getFollowingInProgress(state),
   };
 };
 
@@ -75,7 +95,8 @@ export default compose(
     unfollow,
     setCurrentPage, //pageNumber-номер страницы который нам нужно dispatch
     toggleIsFollowingProgress,
-    getUsers, //создается callback который внутри себя вызовит эту thunk и задиспачит ее результат
+    //создается callback который внутри себя вызовит эту thunk и задиспачит ее результат
+    getUsers: requestUsers,
   })
 )(UsersContainer);
 //===============================HOC=======================================================================

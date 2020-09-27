@@ -123,14 +123,16 @@ export const toggleIsFollowingProgress = (isFetching, userId) => ({
   userId,
 });
 
-//================================Thunk======================================= 
+//================================Thunk=======================================
 
-export const getUsers = (currentPage, pageSize) => {
+export const requestUsers = (page, pageSize) => {
   return (dispatch) => {
     dispatch(toggleIsFetching(true));
     //вызываем getUsers из api.js
-    usersApi.getUsers(currentPage, pageSize).then((data) => {
+    usersApi.getUsers(page, pageSize).then((data) => {
       dispatch(toggleIsFetching(false)); //диспачим actions
+      dispatch(setCurrentPage(page)); //диспачим actions
+
       dispatch(setUsers(data.items)); //это и есть массив наших пользоват (response.data.items)
       dispatch(setTotalUsersCount(data.totalCount)); //121  //количество пользователей
     });
