@@ -90,7 +90,7 @@ const usersReducer = (state = initialState, action) => {
           ? //если true когда идет подписка то добавляем новую id которая приходит в action
             [...state.followingInProgress, action.userId]
           : // а если false то отфильтруем не нужного пользователя,пропускаем только ту id, которая не равна id из в action (userId)
-            state.followingInProgress.filter((id) => id != action.userId),
+            state.followingInProgress.filter((id) => id !== action.userId),
       };
     }
 

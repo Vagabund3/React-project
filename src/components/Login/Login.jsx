@@ -32,18 +32,13 @@ const LoginForm = (props) => {
         />
       </div>
       <div>
-        <Field
-          component={Input}
-          name={"rememberMe"}
-          type={"checkbox"}
-          validate={[required]}
-        />
+        <Field component={Input} name={"rememberMe"} type={"checkbox"} />
         Remember me
       </div>
       {/* //показываем props.error только тогда когда есть ошибка */}
-      {props.error && <div className={style.formSummaryError}>
-      {props.error}
-        </div>}
+      {props.error && (
+        <div className={style.formSummaryError}>{props.error}</div>
+      )}
       <div>
         <button>Login</button>
       </div>
