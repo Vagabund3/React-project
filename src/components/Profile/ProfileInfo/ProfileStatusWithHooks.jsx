@@ -5,16 +5,33 @@ import Preloader from "../../common/Preloader/Preloader";
 //функциональ компонента должна ообразить статус пришедший из props
 
 const ProfileStatusWithHooks = (props) => {
+  // let arr = [0,() => {}]; пример того что мы делаем ниже - Деструктурирующее присваивание
+  // let [a, setA] = arr
   //значение по умолчанию false
-  let stateWithSetState = useState(false); //useState возвращ. массив и в нем сидит 2 элемента //вторым элементом в этом массиве,сидит функция,которая будет изменять одиночное значение(setEditMode)
-  let editMode = stateWithSetState[0];
-  let setEditMode = stateWithSetState[1];
+  let [editMode, setEditMode] = useState(false); //useState возвращ значение(editMode) и функцию к которой можем это значение менять-setEditMode. и useState возвращ. массив и из него достаем первый элемент editMode и второй элемент setEditMode и записываем их в переменную
+  let [status, setStatus] = useState(props.status); //localState
+
+  //сетаем локальный state
+  const activateEditMode = () => {
+    setEditMode(true);
+  };
+
+  const deactivateEditMode = () => {
+    setEditMode(false);
+    props.updateStatus(status); //передаем статус.
+  };
+
+  //при каждом напечатывании символа изменяем localState с помощью setStatus
+  //благодаря (е) узнаем новое значение currentTarget.value и это новое знач. засетаем в качестве статуса local state. На каждое нажатие будет меняться local state, а input зависит от него
+  const onStatusChange = (e) => {
+    setStatus(e.currentTarget.value);
+  };
 
   return (
     <div>
       {!editMode && ( //если не editMode то показ span
         <div>
-          <span>
+          <span onDoubleClick={activateEditMode}>
             {props.status || "-----"} {/* если статуса нет то --- */}
             {/*здесь показываем props потому-что еще не обновился сервак,ушли из editMode,отправили запрос на сервак,он еще думает,а пользователь видит пока старый статус,но потом появл новый,тк в  bll обновился status заново через пропсы пришел акуальный и мы его увидели  */}
           </span>
@@ -23,7 +40,13 @@ const ProfileStatusWithHooks = (props) => {
 
       {editMode && (
         <div>
-          <input autoFocus={true} />
+          <input
+            //показывает local state
+            onChange={onStatusChange}
+            autoFocus={true}
+            onBlur={deactivateEditMode} //onBlur фокус в эллементе
+            value={status} //показываем из local state статус
+          />
         </div>
       )}
     </div>
