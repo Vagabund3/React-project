@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import s from "./ProfileInfo.module.css";
 import Preloader from "../../common/Preloader/Preloader";
 
@@ -8,8 +8,17 @@ const ProfileStatusWithHooks = (props) => {
   // let arr = [0,() => {}]; пример того что мы делаем ниже - Деструктурирующее присваивание
   // let [a, setA] = arr
   //значение по умолчанию false
+
   let [editMode, setEditMode] = useState(false); //useState возвращ значение(editMode) и функцию к которой можем это значение менять-setEditMode. и useState возвращ. массив и из него достаем первый элемент editMode и второй элемент setEditMode и записываем их в переменную
   let [status, setStatus] = useState(props.status); //localState
+
+  //hook который говорит закинте в меня функцию которую я выполню кгда произойдет отрисовка //когда компонента отрисовалась мы можем засинхронизировать setStatus который хранится в state c помощью useState, засинхронить теми данными которые пришли из props
+  //здесь нужно сказать ReactУ,что useEffect наш запускай не всегда,а только 1 раз, в момент когда происходит отрисовка
+  //хотим  чтобы useEffect запускался когда будет изменен props.status,коворим ReactУ что зависим от props.status
+  //Если props.status при очередной отрисовки будет не таким каким он был раньше то запускается useEffect
+  useEffect(() => {
+    setStatus(props.status);
+  }, [props.status]);
 
   //сетаем локальный state
   const activateEditMode = () => {
