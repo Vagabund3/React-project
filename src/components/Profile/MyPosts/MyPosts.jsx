@@ -9,28 +9,6 @@ import {
 } from "../../../utils/validators/validators";
 import { Textarea } from "../../common/FormsControls/FormsControls";
 
-//компонента должна получать данные и callbackИ
-const MyPosts = (props) => {
-  let postsElements = props.posts.map((p) => (
-    <Post message={p.message} likesCount={p.likesCount} />
-  ));
-  let newPostElement = React.createRef();
-
-  // onAddPost это callback в values сидит newPostText
-  let onAddPost = (values) => {
-    props.addPost(values.newPostText);
-  };
-
-  return (
-    <div className={s.postsBlock}>
-      <h3>My posts</h3>
-      <div className={s.posts}>{postsElements}</div>
-      <AddNewPostFormRedux onSubmit={onAddPost} />
-      {/*когда в форме будет Submit-соберет для нас данные, форма вызовет callback который мы ей передадим */}
-    </div>
-  );
-};
-
 const maxLength10 = maxLengthCreator(10);
 
 const AddNewPostForm = (props) => {
@@ -54,6 +32,30 @@ const AddNewPostForm = (props) => {
 const AddNewPostFormRedux = reduxForm({ form: "ProfileAddNewPostForm" })(
   AddNewPostForm
 );
+
+//компонента должна получать данные и callbackИ
+//если компоненту нужно оптимизировать,чтобы она лишний раз не вызывала render в функц. компонентах нужно исп. React.memo
+//memo-hook который принимает одну компоненту а на выходе возвр. другую, в итоге мы возвращаем MyPosts не которая ниже а ту что создал нам hook
+const MyPosts = React.memo((props) => {
+  let postsElements = props.posts.map((p) => (
+    <Post message={p.message} likesCount={p.likesCount} />
+  ));
+
+  let newPostElement = React.createRef();
+  // onAddPost это callback в values сидит newPostText
+  let onAddPost = (values) => {
+    props.addPost(values.newPostText);
+  };
+
+  return (
+    <div className={s.postsBlock}>
+      <h3>My posts</h3>
+      <AddNewPostFormRedux onSubmit={onAddPost} />
+      <div className={s.posts}>{postsElements}</div>
+      {/*когда в форме будет Submit-соберет для нас данные, форма вызовет callback который мы ей передадим */}
+    </div>
+  );
+});
 
 export default MyPosts;
 
