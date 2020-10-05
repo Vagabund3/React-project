@@ -3,6 +3,7 @@ import { authApi, usersApi, profileApi } from "../api/api";
 const ADD_POST = "ADD_POST";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
 const SET_STATUS = "SET_STATUS";
+// const DELETE_POST = "DELETE_POST";
 
 //Инициализирует profileReducer в случае если state не прийдет в функцию
 let initialState = {
@@ -50,6 +51,13 @@ const profileReducer = (state = initialState, action) => {
       };
     }
 
+    // //для примера теста
+    // case SET_STATUS: {
+    //   return {
+    //     ...state, posts: state.posts.filter(p => p.id !=action.postId)
+    //   };
+    // }
+
     default:
       return state; // case по умолчанию
   }
@@ -72,6 +80,8 @@ export const setUserProfile = (profile) => ({
   profile,
 });
 export const setStatus = (status) => ({ type: SET_STATUS, status });
+
+// export const deletePost = (postId) => ({ type: DELETE_POST, postId });
 
 //===================================Thunk====================================
 
