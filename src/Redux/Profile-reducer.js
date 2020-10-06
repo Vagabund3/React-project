@@ -91,33 +91,24 @@ export const setStatus = (status) => ({ type: SET_STATUS, status });
 //(thunkCreator) ниже. принимает в параметрах нужные данные
 //а потом возвращает саму thunk, потом через замыкание к этим данным может достучаться
 
-export const getUsersProfile = (userId) => {
-  return (dispatch) => {
-    usersApi.getProfile(userId).then((response) => {
-      dispatch(setUserProfile(response.data)); //это и есть массив наших пользоват (response.data.items)
-    });
-  };
+export const getUsersProfile = (userId) => async (dispatch) => {
+  let response = await usersApi.getProfile(userId);
+  dispatch(setUserProfile(response.data)); //это и есть массив наших пользоват (response.data.items)
 };
 
-export const getStatus = (userId) => {
-  return (dispatch) => {
-    profileApi.getStatus(userId).then((response) => {
-      dispatch(setStatus(response.data));
-    });
-  };
+export const getStatus = (userId) => async (dispatch) => {
+  let response = await profileApi.getStatus(userId);
+  dispatch(setStatus(response.data));
 };
 
 //thunk которая будет слать запрос на сервак чтобы обновить статус
 //тот status который сюда пришел-(первая строчка) мы его сетаем(setStatus) чтобы его отобразить
-export const updateStatus = (status) => {
-  return (dispatch) => {
-    profileApi.updateStatus(status).then((response) => {
-      //если resultCode 1 то какая-то ощибка, если 0 о то все ок
-      if (response.data.resultCode === 0) {
-        dispatch(setStatus(status));
-      }
-    });
-  };
+export const updateStatus = (status) => async (dispatch) => {
+  let response = await profileApi.updateStatus(status);
+  //если resultCode 1 то какая-то ощибка, если 0 о то все ок
+  if (response.data.resultCode === 0) {
+    dispatch(setStatus(status));
+  }
 };
 
 export default profileReducer;

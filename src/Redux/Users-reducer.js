@@ -126,42 +126,37 @@ export const toggleIsFollowingProgress = (isFetching, userId) => ({
 //================================Thunk=======================================
 
 export const requestUsers = (page, pageSize) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(toggleIsFetching(true));
+    dispatch(setCurrentPage(page)); //диспачим actions
     //вызываем getUsers из api.js
-    usersApi.getUsers(page, pageSize).then((data) => {
-      dispatch(toggleIsFetching(false)); //диспачим actions
-      dispatch(setCurrentPage(page)); //диспачим actions
-
-      dispatch(setUsers(data.items)); //это и есть массив наших пользоват (response.data.items)
-      dispatch(setTotalUsersCount(data.totalCount)); //121  //количество пользователей
-    });
+    let data = await usersApi.getUsers(page, pageSize);
+    dispatch(toggleIsFetching(false)); //диспачим actions
+    dispatch(setCurrentPage(page)); //диспачим actions
+    dispatch(setUsers(data.items)); //это и есть массив наших пользоват (response.data.items)
+    dispatch(setTotalUsersCount(data.totalCount)); //121  //количество пользователей
   };
 };
 export const follow = (userId) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(toggleIsFollowingProgress(true, userId)); // перед запросом диспачим true
-    usersApi
-      .follow(userId) //"посредник в виде DAL как на схеме"
-      .then((response) => {
-        //сервер подтв. что подписка или отписка произошла
-        //и мы должны задиспачить этот callback в reducer
-        if (response.data.resultCode === 0) {
-          dispatch(followSuccess(userId));
-        }
-        dispatch(toggleIsFollowingProgress(false, userId)); //когда запрос закончится то диспачим false
-      });
+    let response = await usersApi.follow(userId); //"посредник в виде DAL как на схеме"
+    //сервер подтв. что подписка или отписка произошла
+    //и мы должны задиспачить этот callback в reducer
+    if (response.data.resultCode === 0) {
+      dispatch(followSuccess(userId));
+    }
+    dispatch(toggleIsFollowingProgress(false, userId)); //когда запрос закончится то диспачим false
   };
 };
 export const unfollow = (userId) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(toggleIsFollowingProgress(true, userId));
-    usersApi.unfollow(userId).then((response) => {
-      if (response.data.resultCode === 0) {
-        dispatch(unfollowSuccess(userId));
-      }
-      dispatch(toggleIsFollowingProgress(false, userId));
-    });
+    let response = await usersApi.unfollow(userId);
+    if (response.data.resultCode === 0) {
+      dispatch(unfollowSuccess(userId));
+    }
+    dispatch(toggleIsFollowingProgress(false, userId));
   };
 };
 

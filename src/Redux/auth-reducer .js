@@ -1,7 +1,7 @@
 import { authApi } from "../api/api";
 import { stopSubmit } from "redux-form";
 
-const SET_USER_DATA = "SET_USER_DATA";
+const SET_USER_DATA = "social-network/auth/SET_USER_DATA";
 
 let initialState = {
   userId: null,
@@ -32,39 +32,35 @@ export const setAuthUserData = (userId, email, login, isAuth) => ({
 
 //===================================Thunk====================================
 
-export const getAuthUserData = () => (dispatch) => {
-  return authApi
-    .me() //по факту me() возвращает нам промис и мы на него thenМся (любой then тоже возвращает промис)  //me() никакие параменты не принимат поэтому (значит для запроса не нужно ничего знать) в thunCreator()- ничего не передаем
-    .then((response) => {
-      //если if то в этом случае мы залогинены и диспачим эти авторизационные данные
-      if (response.data.resultCode === 0) {
-        let { id, email, login } = response.data.data;
-        dispatch(setAuthUserData(id, email, login, true)); //и вызываем АС с теми данными которые получили из response из сервака
-      }
-    });
+//cm. стр 33
+export const getAuthUserData = () => async (dispatch) => {
+  let response = await authApi.me(); //по факту me() возвращает нам промис и мы на него thenМся (любой then тоже возвращает промис)  //me() никакие параменты не принимат поэтому (значит для запроса не нужно ничего знать) в thunCreator()- ничего не передаем
+  //если if то в этом случае мы залогинены и диспачим эти авторизационные данные
+  if (response.data.resultCode === 0) {
+    let { id, email, login } = response.data.data;
+    dispatch(setAuthUserData(id, email, login, true)); //и вызываем АС с теми данными которые получили из response из сервака
+  }
 };
 
-export const login = (email, password, rememberMe) => (dispatch) => {
-  authApi.login(email, password, rememberMe).then((response) => {
-    if (response.data.resultCode === 0) {
-      dispatch(getAuthUserData()); //Диспачим thunk чтобы получить инфу обо мне
-    } else {
-      let message =
-        response.data.messages.length > 0
-          ? response.data.messages[0]
-          : "Some error";
-      dispatch(stopSubmit("login", { _error: message })); //проблемное поле которое вызвало ошибку(stopSubmit)) cтр 26!!!
-    }
-  });
+export const login = (email, password, rememberMe) => async (dispatch) => {
+  let response = await authApi.login(email, password, rememberMe);
+  if (response.data.resultCode === 0) {
+    dispatch(getAuthUserData()); //Диспачим thunk чтобы получить инфу обо мне
+  } else {
+    let message =
+      response.data.messages.length > 0
+        ? response.data.messages[0]
+        : "Some error";
+    dispatch(stopSubmit("login", { _error: message })); //проблемное поле которое вызвало ошибку(stopSubmit)) cтр 26!!!
+  }
 };
 
 //когда делается logout сервак удаляет cookie и мы должны зачистить состояние
-export const logout = () => (dispatch) => {
-  authApi.logout().then((response) => {
-    if (response.data.resultCode === 0) {
-      dispatch(setAuthUserData(null, null, null, false)); // делается logout должны занулить все что знали о пользователе
-    }
-  });
+export const logout = () => async (dispatch) => {
+  let response = await authApi.logout();
+  if (response.data.resultCode === 0) {
+    dispatch(setAuthUserData(null, null, null, false)); // делается logout должны занулить все что знали о пользователе
+  }
 };
 
 export default authReducer;
