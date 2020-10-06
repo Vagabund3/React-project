@@ -1,4 +1,5 @@
 import { usersApi } from "../api/api";
+import { updateObjectInArray } from "../utils/object-helper";
 
 //BLL
 const FOLLOW = "FOLLOW";
@@ -27,29 +28,17 @@ const usersReducer = (state = initialState, action) => {
     case FOLLOW:
       return {
         ...state,
-        //пробегаем через масcив users с помощью map(), map() создает новый массив
-        // элиментоми которого будут те же самые users,users приходит в callback и возвращается обратно
-        users: state.users.map((u) => {
-          //если id U равен тому id который нужно follow-он сидит в userId(action)
-          // то тогда мы должны у этого пользоват. сделать изменения,
-          //но так как у нас имьютабельность мы не пожем пользователя изменить,
-          // мы должныы скопировать пользователя и вернуть копию
-          //если id совпадает то мы возвращаем копию, если нет то возвращаем тот же самый объект (return u)
-          if (u.id === action.userId) {
-            return { ...u, followed: true };
-          }
-          return u;
+        //вспомогательная функция(updateObjectInArray)которая помогает имьютабельно изменить в массиве какой-либо объект
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: true,
         }),
       };
 
     case UNFOLLOW:
       return {
         ...state,
-        users: state.users.map((u) => {
-          if (u.id === action.userId) {
-            return { ...u, followed: false };
-          }
-          return u;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: false,
         }),
       };
 
@@ -137,26 +126,38 @@ export const requestUsers = (page, pageSize) => {
     dispatch(setTotalUsersCount(data.totalCount)); //121  //количество пользователей
   };
 };
+
+//Общий метод внутри которогонаписаны параметры которые принимают ThunkИ - follow u unfollow
+//вся дублирующиеся логика перенесли сюда
+const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
+  dispatch(toggleIsFollowingProgress(true, userId)); // перед запросом диспачим true
+  let response = await apiMethod(userId); //"посредник в виде DAL как на схеме"
+  //сервер подтв. что подписка или отписка произошла
+  //и мы должны задиспачить этот callback в reducer
+  if (response.data.resultCode === 0) {
+    dispatch(actionCreator(userId));
+  }
+  dispatch(toggleIsFollowingProgress(false, userId)); //когда запрос закончится то диспачим false
+};
+
 export const follow = (userId) => {
   return async (dispatch) => {
-    dispatch(toggleIsFollowingProgress(true, userId)); // перед запросом диспачим true
-    let response = await usersApi.follow(userId); //"посредник в виде DAL как на схеме"
-    //сервер подтв. что подписка или отписка произошла
-    //и мы должны задиспачить этот callback в reducer
-    if (response.data.resultCode === 0) {
-      dispatch(followSuccess(userId));
-    }
-    dispatch(toggleIsFollowingProgress(false, userId)); //когда запрос закончится то диспачим false
+    followUnfollowFlow(
+      dispatch,
+      userId,
+      usersApi.follow.bind(usersApi),
+      followSuccess
+    );
   };
 };
 export const unfollow = (userId) => {
   return async (dispatch) => {
-    dispatch(toggleIsFollowingProgress(true, userId));
-    let response = await usersApi.unfollow(userId);
-    if (response.data.resultCode === 0) {
-      dispatch(unfollowSuccess(userId));
-    }
-    dispatch(toggleIsFollowingProgress(false, userId));
+    followUnfollowFlow(
+      dispatch,
+      userId,
+      usersApi.unfollow.bind(usersApi),
+      unfollowSuccess
+    );
   };
 };
 
