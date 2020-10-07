@@ -19,6 +19,7 @@ class App extends Component {
   componentDidMount() {
     this.props.initializeApp();
   }
+
   render() {
     //если не проиниц. то вернем Preloader
     if (!this.props.initialized) {
@@ -58,7 +59,6 @@ const mapStateToProps = (state) => ({
 
 export default compose(
   withRouter,
-  connect(mapStateToProps, { initializeApp })
-)(App); //диспачим thunk initializeApp
+  connect(mapStateToProps, { initializeApp }))(App); //диспачим thunk initializeApp
 
 //cм стр 28(getAuthUserData)

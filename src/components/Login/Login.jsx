@@ -3,42 +3,30 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { reduxForm, Field } from "redux-form";
 import { required } from "../../utils/validators/validators";
-import { Input } from "../common/FormsControls/FormsControls";
+import { createField, Input } from "../common/FormsControls/FormsControls";
 import { login } from "../../Redux/auth-reducer ";
 import style from "./../common/FormsControls/FormsControls.module.css";
 
-const LoginForm = (props) => {
+//деструктуризация параметров, вместо того чтобы постоянно писать props записываем то что они передаеют
+const LoginForm = ({ handleSubmit, error }) => {
   return (
     //при вводе в пропсах приходит callback "handleSubmit" (который дает ReduxForm) мы должны повесить на его на событие формы onSubmit и доверяем ему обработку handleSubmit
-    <form onSubmit={props.handleSubmit}>
-      <div>
-        <Field
-          placeholder={"Email"}
-          name={"email"}
-          component={Input}
-          validate={[required]}
-        />
-        {/*Field - компоненты(контейнерная)  которые отрисовывают указанный элемент, в нашем случае input  */}
-        {/* Любая форма должна отправлятся на сервак под каким-то name={""} */}
-        {/* Redux-Form будет реагировать на эти Name чтобы обеспечить нашу логику. В Field onChange уже засетаны,они будут брать эти name{"} и будут общаться со своим state */}
-      </div>
-      <div>
-        <Field
-          placeholder={"Password"}
-          name={"password"}
-          component={Input}
-          validate={[required]}
-          type={"password"}
-        />
-      </div>
-      <div>
-        <Field component={Input} name={"rememberMe"} type={"checkbox"} />
-        Remember me
-      </div>
-      {/* //показываем props.error только тогда когда есть ошибка */}
-      {props.error && (
-        <div className={style.formSummaryError}>{props.error}</div>
+    <form onSubmit={handleSubmit}>
+      {createField("Email", "email", [required], Input)}
+      {createField("Password", "password", [required], Input, {
+        type: "password",
+      })}
+      {createField(
+        null,
+        "rememberMe",
+        [],
+        Input,
+        { type: "checkbox" },
+        "rememberMe"
       )}
+
+      {/* //показываем props.error только тогда когда есть ошибка */}
+      {error && <div className={style.formSummaryError}>{error}</div>}
       <div>
         <button>Login</button>
       </div>
