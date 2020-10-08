@@ -5,23 +5,17 @@ import ProfileStatus from "./ProfileStatus";
 import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 
 //в props приходит Profile
-const ProfileInfo = (props) => {
+const ProfileInfo = ({ profile, status, updateStatus }) => {
   // Если profilе нет(!) то он будет true
-  if (!props.profile) {
+  if (!profile) {
     return <Preloader />;
   }
 
   return (
     <div>
-      <div className={s.imgTrash}>
-        <img src=""></img>
-      </div>
       <div className={s.descriptionBlock}>
-        <img src={props.profile.photos.large} />
-        <ProfileStatusWithHooks
-          status={props.status}
-          updateStatus={props.updateStatus}
-        />
+        <img src={profile.photos.large} />
+        <ProfileStatusWithHooks status={status} updateStatus={updateStatus} />
       </div>
     </div>
   );
