@@ -36,6 +36,9 @@ it("length of new post should be correct", () => {
   expect(newState.posts[3].message).toBe("newPostTextTest");
 });
 
+
+
+
 // //пишим тест на ту логику которой у нас пока нет
 // it("after deleting length of messages should be decrement", () => {
 //   //1. test data
@@ -60,3 +63,4 @@ it("length of new post should be correct", () => {
 //   //3. expectation(ожидание)
 //   expect(newState.posts.length).toBe(3);
 // })
+  

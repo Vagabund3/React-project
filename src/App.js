@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { Route, withRouter } from "react-router-dom";
+import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import News from "./components/News/News";
 import Video from "./components/Video/Video";
 import Settings from "./components/Settings/Settings";
@@ -10,10 +10,11 @@ import UsersContainer from "./components/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import LoginPage from "./components/Login/Login";
-import { connect } from "react-redux";
+import { connect, Provider } from "react-redux";
 import { initializeApp } from "./Redux/app-reducer";
 import { compose } from "redux";
 import Preloader from "./components/common/Preloader/Preloader";
+import store from "./Redux/redux-store";
 
 class App extends Component {
   componentDidMount() {
@@ -57,8 +58,22 @@ const mapStateToProps = (state) => ({
   //то есть мы будем возвращать всю разметку только тогда когда мы проинициализировались
 });
 
-export default compose(
+let AppContainer = compose(
   withRouter,
-  connect(mapStateToProps, { initializeApp }))(App); //диспачим thunk initializeApp
+  connect(mapStateToProps, { initializeApp })
+)(App); //диспачим thunk initializeApp
 
 //cм стр 28(getAuthUserData)
+
+//все оборачивание которое происходило в index.js переносим сюда
+const ReactApp = (props) => {
+  return (
+    <BrowserRouter>
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    </BrowserRouter>
+  );
+};
+
+export default ReactApp;
