@@ -12,7 +12,7 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE_IS_FOLLOWING_PROGRESS";
 
 let initialState = {
   users: [],
-  pageSize: 5,
+  pageSize: 10,
   totalUsersCount: 0,
   currentPage: 1,
   isFetching: true, //крутилка
@@ -129,7 +129,12 @@ export const requestUsers = (page, pageSize) => {
 
 //Общий метод внутри которогонаписаны параметры которые принимают ThunkИ - follow u unfollow
 //вся дублирующиеся логика перенесли сюда
-const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
+const followUnfollowFlow = async (
+  dispatch,
+  userId,
+  apiMethod,
+  actionCreator
+) => {
   dispatch(toggleIsFollowingProgress(true, userId)); // перед запросом диспачим true
   let response = await apiMethod(userId); //"посредник в виде DAL как на схеме"
   //сервер подтв. что подписка или отписка произошла
