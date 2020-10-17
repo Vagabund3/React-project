@@ -5,9 +5,7 @@ import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import News from "./components/News/News";
 import Video from "./components/Video/Video";
 import Settings from "./components/Settings/Settings";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from "./components/Users/UsersContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import LoginPage from "./components/Login/Login";
 import { connect, Provider } from "react-redux";
@@ -15,6 +13,13 @@ import { initializeApp } from "./Redux/app-reducer";
 import { compose } from "redux";
 import Preloader from "./components/common/Preloader/Preloader";
 import store from "./Redux/redux-store";
+import { withSuspense } from "./hoc/withSuspense";
+const DialogsContainer = React.lazy(() =>
+  import("./components/Dialogs/DialogsContainer")
+); //есть какая-то компонента но она отрисуется только тогда когда за ней удет запрос,но в итоговый бандл эта комонента не попадает,что значит снижает нагрузку при отрисовке
+const ProfileContainer = React.lazy(() =>
+  import("./components/Profile/ProfileContainer")
+);
 
 class App extends Component {
   componentDidMount() {
@@ -34,12 +39,13 @@ class App extends Component {
         <div className="app-wrapper-content">
           <Route
             path="/profile/:userId?" //userId говорит что в url есть params{}, ? говорит что параметр не обязат.19 мин 60 видео
-            render={() => <ProfileContainer />}
+            render={withSuspense(ProfileContainer)}
           />
           <Route //следит за url,смотрит на адресную строку
             path="/dialogs"
-            render={() => <DialogsContainer />}
+            render={withSuspense(DialogsContainer)}
           />
+
           <Route path="/users" render={() => <UsersContainer />} />
 
           <Route path="/login" render={() => <LoginPage />} />
