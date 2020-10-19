@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
+import Preloader from "../common/Preloader/Preloader";
 
 //компонента должна получать только данные и callbacku
 
@@ -28,6 +29,7 @@ let mapDispatchToProps = (dispatch) => {
         }
     }
 }
+
 
 ////Все callbackИ, которые DispatchАТ что-то в state мы закидываем в mapDispatchToProps
 //служит для того чтобы передавать дочерней презентационной компоненте,через пропсы callback
