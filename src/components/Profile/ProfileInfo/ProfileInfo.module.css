@@ -2,6 +2,6 @@
   padding: 10px;
 }
 
-.imgTrash img {
-    width: 100%;
+.avaPic {
+  max-width: 150px;
 }

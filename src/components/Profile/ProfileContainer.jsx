@@ -10,8 +10,11 @@ import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 
 // Чтобы React понимал и взвимодействовал с этим классом как с производителем компонент необходимо (extends)
+
 class ProfileContainer extends React.Component {
-  componentDidMount() {
+  refreshProfile() {
+    // 1.если userId нет и мы не 3. авторизованы то делаем redirect
+    // в противном случае загружаем пользователя с this...(userId)
     let userId = this.props.match.params.userId;
     if (!userId) {
       userId = this.props.authorizedUserId; //11007 //11582
@@ -20,8 +23,24 @@ class ProfileContainer extends React.Component {
         this.props.history.push("/login"); //Redirect создавали с помошью компоненты здесь не можем сделать,поэтому делаем так: В пропсах есть объект history и у него есть метод push который можно вызвать и в history можем pushИТЬ новый path(путь) и у нас перейдет переход на новую страницу
       }
     }
-    this.props.getUsersProfile(userId);
+    this.props.getUsersProfile(userId); //запрос на профайл
     this.props.getStatus(userId); //запрос на статус
+  }
+
+  //чтобы избежать дублирования создал переменную refreshProfile;
+  //нужно обновлять-refreshProfile когда в пропсах изменится значение userId выше
+  //и если он изменился то тогда есть смысл вызывать refreshProfile
+
+  componentDidMount() {
+    this.refreshProfile();
+  }
+  //если ID из текущих пропсов не равна ID из предыдущих пропсов
+  // то меняем props на prevProps
+  //и если они не равны то запрашиваем новые данные
+  componentDidUpdate(prevProps, prevState) {
+    debugger;
+    if (this.props.match.params.userId != prevProps.match.params.userId)
+      this.refreshProfile();
   }
 
   render() {

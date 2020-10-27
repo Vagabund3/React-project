@@ -17,19 +17,18 @@ import Preloader from "../common/Preloader/Preloader";
 
 //превратить часть State(state.dialogsPage) в пропсы.
 let mapStateToProps = (state) => {
-    return {
-        dialogsPage: state.dialogsPage
-    }
-}
+  return {
+    dialogsPage: state.dialogsPage,
+  };
+};
 
 let mapDispatchToProps = (dispatch) => {
-    return {
-        sendMessage: (newMessageBody) => {
-            dispatch(sendMessageCreator(newMessageBody));
-        }
-    }
-}
-
+  return {
+    sendMessage: (newMessageBody) => {
+      dispatch(sendMessageCreator(newMessageBody));
+    },
+  };
+};
 
 ////Все callbackИ, которые DispatchАТ что-то в state мы закидываем в mapDispatchToProps
 //служит для того чтобы передавать дочерней презентационной компоненте,через пропсы callback
@@ -83,9 +82,3 @@ export default compose(
 
 //           CONNECT помогает делать локальные перерисовки и внутри он сам делает subscribe
 //           давая нам возможеность не вызывать subscribe
-
-
-
-
-
-
