@@ -3,9 +3,9 @@ import * as Axios from "axios";
 // Создаем конкретный экземпляр AxiosA-(Instance)- это объекты которые содержат настройки по работе с конкретной API
 const instance = Axios.create({
   withCredentials: true, // в котором сидят настройки запроса,помогает узнать авторизованы или нет
-  baseURL: 'https://social-network.samuraijs.com/api/1.0/',
+  baseURL: "https://social-network.samuraijs.com/api/1.0/",
   headers: {
-    "API-KEY": "7ecb0c6c-b2cc-43f2-b68e-676d06268d2b",//7ecb0c6c-b2cc-43f2-b68e-676d06268d2b
+    "API-KEY": "7ecb0c6c-b2cc-43f2-b68e-676d06268d2b", //7ecb0c6c-b2cc-43f2-b68e-676d06268d2b
   },
 });
 
@@ -53,6 +53,20 @@ export const profileApi = {
   updateStatus(status) {
     return instance.put(`profile/status`, {
       status: status, //отправляем на сервак объект у которого есть св-во status, см.документацию put запрос
+    });
+  },
+
+  savePhoto(photoFile) {
+    //когда отправляется файл на сервак,то должны указать ему другой тип
+    //добавляем файл который получили из input profileInfo в нашем случае он приходит как параметр photoFile
+    //formData отправляем на сервак 2-м параметром
+    //
+    const formData = new FormData();
+    formData.append("image", photoFile);
+    return instance.put(`profile/Photo`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
   },
 };

@@ -3,6 +3,7 @@ import { authApi, usersApi, profileApi } from "../api/api";
 const ADD_POST = "ADD_POST";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
 const SET_STATUS = "SET_STATUS";
+const SAVE_PHOTO_SUCCESS = "SAVE_PHOTO_SUCCESS";
 // const DELETE_POST = "DELETE_POST";
 
 //Инициализирует profileReducer в случае если state не прийдет в функцию
@@ -51,6 +52,14 @@ const profileReducer = (state = initialState, action) => {
       };
     }
 
+    case SAVE_PHOTO_SUCCESS: {
+      return {
+        ...state,
+        //делаем копию того профайла что был,а раздел photos поменять на те photos которые пришли в action
+        profile: { ...state.profile, photos: action.photos },
+      };
+    }
+
     // //для примера теста
     // case SET_STATUS: {
     //   return {
@@ -81,6 +90,11 @@ export const setUserProfile = (profile) => ({
 });
 export const setStatus = (status) => ({ type: SET_STATUS, status });
 
+export const savePhotoSuccess = (photos) => ({
+  type: SAVE_PHOTO_SUCCESS,
+  photos,
+});
+
 // export const deletePost = (postId) => ({ type: DELETE_POST, postId });
 
 //===================================Thunk====================================
@@ -105,9 +119,16 @@ export const getStatus = (userId) => async (dispatch) => {
 //тот status который сюда пришел-(первая строчка) мы его сетаем(setStatus) чтобы его отобразить
 export const updateStatus = (status) => async (dispatch) => {
   let response = await profileApi.updateStatus(status);
-  //если resultCode 1 то какая-то ощибка, если 0 о то все ок
+  //если resultCode 1 то какая-то ошибка, если 0 то все ок
   if (response.data.resultCode === 0) {
     dispatch(setStatus(status));
+  }
+};
+
+export const savePhoto = (file) => async (dispatch) => {
+  let response = await profileApi.savePhoto(file);
+  if (response.data.resultCode === 0) {
+    dispatch(savePhotoSuccess(response.data.data.photos));
   }
 };
 
