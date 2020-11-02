@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import s from "./ProfileInfo.module.css";
 import Preloader from "../../common/Preloader/Preloader";
 
-//функциональ компонента должна ообразить статус пришедший из props
+//функционал. компонента должна отбразить статус пришедший из props
 
 const ProfileStatusWithHooks = (props) => {
   // let arr = [0,() => {}]; пример того что мы делаем ниже - Деструктурирующее присваивание
@@ -12,9 +12,10 @@ const ProfileStatusWithHooks = (props) => {
   let [editMode, setEditMode] = useState(false); //useState возвращ значение(editMode) и функцию к которой можем это значение менять-setEditMode. и useState возвращ. массив и из него достаем первый элемент editMode и второй элемент setEditMode и записываем их в переменную
   let [status, setStatus] = useState(props.status); //localState
 
-  //hook который говорит закинте в меня функцию которую я выполню кoгда произойдет отрисовка //когда компонента отрисовалась мы можем засинхронизировать setStatus который хранится в state c помощью useState, засинхронить теми данными которые пришли из props
+  //hook который говорит закиньте в меня функцию которую я выполню кoгда произойдет отрисовка
+  //когда компонента отрисовалась мы можем засинхронизировать setStatus который хранится в state c помощью useState, засинхронить теми данными которые пришли из props
   //здесь нужно сказать ReactУ,что useEffect наш запускай не всегда,а только 1 раз, в момент когда происходит отрисовка
-  //хотим  чтобы useEffect запускался когда будет изменен props.status,коворим ReactУ что зависим от props.status
+  //хотим  чтобы useEffect запускался когда будет изменен props.status,говорим ReactУ что зависим от props.status
   //Если props.status при очередной отрисовки будет не таким каким он был раньше то запускается useEffect
   useEffect(() => {
     setStatus(props.status);
@@ -40,6 +41,7 @@ const ProfileStatusWithHooks = (props) => {
     <div>
       {!editMode && ( //если не editMode то показ span
         <div>
+          <b>Status</b>:&nbsp;
           <span onDoubleClick={activateEditMode}>
             {props.status || "-----"} {/* если статуса нет то --- */}
             {/*здесь показываем props потому-что еще не обновился сервак,ушли из editMode,отправили запрос на сервак,он еще думает,а пользователь видит пока старый статус,но потом появл новый,тк в  bll обновился status заново через пропсы пришел акуальный и мы его увидели  */}

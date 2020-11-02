@@ -38,7 +38,7 @@ const AddNewPostFormRedux = reduxForm({ form: "ProfileAddNewPostForm" })(
 //memo-hook который принимает одну компоненту а на выходе возвр. другую, в итоге мы возвращаем MyPosts не которая ниже а ту что создал нам hook
 const MyPosts = React.memo((props) => {
   let postsElements = props.posts.map((p) => (
-    <Post message={p.message} likesCount={p.likesCount} />
+    <Post key={p.id} message={p.message} likesCount={p.likesCount} />
   ));
 
   let newPostElement = React.createRef();

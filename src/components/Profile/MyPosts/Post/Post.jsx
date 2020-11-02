@@ -4,7 +4,7 @@ import s from "./Post.module.css";
 const Post = (props) => {
   return (
     <div className={s.item}>
-      <img src="https://hiphop4real.com/wp-content/uploads/2018/08/Lil-Xan-1280x720.jpg" />
+      <img src="/React-project/static/media/UsersAva.739297c3.png" />
       {props.message}
       <div>
         <span>Like</span>

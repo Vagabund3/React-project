@@ -60,7 +60,6 @@ export const profileApi = {
     //когда отправляется файл на сервак,то должны указать ему другой тип
     //добавляем файл который получили из input profileInfo в нашем случае он приходит как параметр photoFile
     //formData отправляем на сервак 2-м параметром
-    //
     const formData = new FormData();
     formData.append("image", photoFile);
     return instance.put(`profile/Photo`, formData, {
@@ -68,6 +67,9 @@ export const profileApi = {
         "Content-Type": "multipart/form-data",
       },
     });
+  },
+  saveProfile(profile) {
+    return instance.put(`profile`, profile);
   },
 };
 

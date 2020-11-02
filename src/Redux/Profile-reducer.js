@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { authApi, usersApi, profileApi } from "../api/api";
 
 const ADD_POST = "ADD_POST";
@@ -129,6 +130,22 @@ export const savePhoto = (file) => async (dispatch) => {
   let response = await profileApi.savePhoto(file);
   if (response.data.resultCode === 0) {
     dispatch(savePhotoSuccess(response.data.data.photos));
+  }
+};
+
+//если сервак сказалл да и обновил инфу в профиле то еще раз запрашиваем getUsersProfile
+// чтобы после обновление он возвращ новый профайл с измененными данными
+//в thunk помимо dispatch приходит функция которая позволяет взять State целиком-getState
+//не запрещенно в рвмках 1 reducer обращатся к другим reducer
+export const saveProfile = (profile) => async (dispatch, getState) => {
+  const userId = getState().auth.userId; //текущий пользовательчкий Id
+  let response = await profileApi.saveProfile(profile);
+  if (response.data.resultCode === 0) {
+    dispatch(getUsersProfile(userId));
+  } else {
+    //общая ощибка заполнения формы ссылок и возвращ promise reject(reason) возвращает объект Promise, который был отклонен по указанной причине.
+    dispatch(stopSubmit("edit-profile", { _error: response.data.messages[0] }));
+    return Promise.reject(response.data.messages[0]);
   }
 };
 

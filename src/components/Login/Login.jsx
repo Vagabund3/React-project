@@ -10,7 +10,7 @@ import style from "./../common/FormsControls/FormsControls.module.css";
 //деструктуризация параметров, вместо того чтобы постоянно писать props записываем то что они передаеют
 const LoginForm = ({ handleSubmit, error }) => {
   return (
-    //при вводе в пропсах приходит callback "handleSubmit" (который дает ReduxForm) мы должны повесить на его на событие формы onSubmit и доверяем ему обработку handleSubmit
+    //при вводе в пропсах приходит callback "handleSubmit" (который дает ReduxForm) мы должны повесить на него на событие формы onSubmit и доверяем ему обработку handleSubmit
     <form onSubmit={handleSubmit}>
       {createField("Email", "email", [required], Input)}
       {createField("Password", "password", [required], Input, {

@@ -12,6 +12,7 @@ const Profile = (props) => {
         status={props.status} //без this. потому-что мы в функционал компоненте
         updateStatus={props.updateStatus}
         savePhoto={props.savePhoto}
+        saveProfile={props.saveProfile}
       />
       <MyPostsContainer />
     </div>
