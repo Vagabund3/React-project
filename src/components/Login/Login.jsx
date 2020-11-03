@@ -8,7 +8,7 @@ import { login } from "../../Redux/auth-reducer ";
 import style from "./../common/FormsControls/FormsControls.module.css";
 
 //деструктуризация параметров, вместо того чтобы постоянно писать props записываем то что они передаеют
-const LoginForm = ({ handleSubmit, error }) => {
+const LoginForm = ({ handleSubmit, error, captchaUrl }) => {
   return (
     //при вводе в пропсах приходит callback "handleSubmit" (который дает ReduxForm) мы должны повесить на него на событие формы onSubmit и доверяем ему обработку handleSubmit
     <form onSubmit={handleSubmit}>
@@ -22,8 +22,13 @@ const LoginForm = ({ handleSubmit, error }) => {
         [],
         Input,
         { type: "checkbox" },
-        "rememberMe"
+        "remember me"
       )}
+
+      {/* если captchaUrl присутствует то показыв. картинку */}
+      {captchaUrl && <img src={captchaUrl} />}
+      {/* field для captcha */}
+      {captchaUrl && createField("Symbols from image", "captcha", [required], Input, {})}
 
       {/* //показываем props.error только тогда когда есть ошибка */}
       {error && <div className={style.formSummaryError}>{error}</div>}
@@ -40,7 +45,12 @@ const LoginReduxForm = reduxForm({ form: "login" })(LoginForm);
 //сюда придут все значения из form
 const Login = (props) => {
   const onSubmit = (formData) => {
-    props.login(formData.email, formData.password, formData.rememberMe); //из пропсов вызываем логин он приходит благодаря connect.(Но здесь приходит не login из thunkCreatorA ниже). Когда поподает сюда в пропсы, connect засовывает под тем же самым именем другую функцию-callback,которая внутри себя диспачит вызов {login}-thunkCreatorA
+    props.login(
+      formData.email,
+      formData.password,
+      formData.rememberMe,
+      formData.captcha
+    ); //из пропсов вызываем логин он приходит благодаря connect.(Но здесь приходит не login из thunkCreatorA ниже). Когда поподает сюда в пропсы, connect засовывает под тем же самым именем другую функцию-callback,которая внутри себя диспачит вызов {login}-thunkCreatorA
     //Итог: callback принимает параметры с (formData...) а потом диспачит вызов thunkCreatorA-{login} и в него передаются эти же параметры что передаются в callback
   };
 
@@ -50,12 +60,14 @@ const Login = (props) => {
   return (
     <div>
       <h1>Login</h1>
-      <LoginReduxForm onSubmit={onSubmit} />
+      {/* captchaUrl приходит в LRF,дальше попадает в form */}
+      <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
     </div>
   );
 };
 const mapStateToProps = (state) => ({
-  //возвращ объект
+  //возвращ. объект
+  captchaUrl: state.auth.captchaUrl,
   isAuth: state.auth.isAuth,
 });
 

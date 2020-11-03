@@ -61,13 +61,6 @@ const profileReducer = (state = initialState, action) => {
       };
     }
 
-    // //для примера теста
-    // case SET_STATUS: {
-    //   return {
-    //     ...state, posts: state.posts.filter(p => p.id !=action.postId)
-    //   };
-    // }
-
     default:
       return state; // case по умолчанию
   }
