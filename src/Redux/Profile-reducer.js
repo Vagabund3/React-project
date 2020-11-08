@@ -113,10 +113,14 @@ export const getStatus = (userId) => async (dispatch) => {
 //тот status который сюда пришел-(первая строчка) мы его сетаем(setStatus) чтобы его отобразить
 export const updateStatus = (status) => async (dispatch) => {
   let response = await profileApi.updateStatus(status);
-  //если resultCode 1 то какая-то ошибка, если 0 то все ок
-  if (response.data.resultCode === 0) {
-    dispatch(setStatus(status));
-  }
+  //если прийдет негатив(403 code). ответ то упадет catch то перехватим эту ошибку (catch error)
+  try {
+    //если resultCode 1 то какая-то ошибка, если 0 то все ок
+    if (response.data.resultCode === 0) {
+      dispatch(setStatus(status));
+    }
+  } catch (error) {
+   }
 };
 
 export const savePhoto = (file) => async (dispatch) => {

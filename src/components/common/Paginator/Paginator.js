@@ -49,9 +49,10 @@ let Paginator = ({
             <span
               //если currentPage равна {p}-(которую мы push выше)
               //то тогда styles.selectedPage прийдет в className
+              //classnames cn позволяет объединять несколько классов
               className={cn(
                 {
-                  [styles.selectedPage]: currentPage === p,
+                  [styles.selectedPage]: currentPage === p, //этот класс будет добавл. в том случае если currentPage  не меняется а р да - 99 с 35мин
                 },
                 styles.pageNumber
               )}

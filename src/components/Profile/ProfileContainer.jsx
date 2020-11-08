@@ -12,7 +12,6 @@ import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 
 // Чтобы React понимал и взвимодействовал с этим классом как с производителем компонент необходимо (extends)
-
 class ProfileContainer extends React.Component {
   refreshProfile() {
     // 1.если userId нет и мы не 3. авторизованы то делаем redirect

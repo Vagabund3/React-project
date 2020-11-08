@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { HashRouter, Route, withRouter } from "react-router-dom";
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+  withRouter,
+} from "react-router-dom";
 import News from "./components/News/News";
 import Video from "./components/Video/Video";
 import Settings from "./components/Settings/Settings";
@@ -22,8 +28,22 @@ const ProfileContainer = React.lazy(() =>
 );
 
 class App extends Component {
+  //отлавливаем ошибки
+  catchAllUnhandledErrors = (promise, reason) => {
+    //alert("some error");
+    //console.log(promiseRejectionEvents)
+  };
   componentDidMount() {
     this.props.initializeApp();
+    //когда произ. событие не перехваченное rejection нужно вызвать наш метод
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+  }
+  //если в компонентах добовляем addEventListener обязательно к нему нужно добовлять removeEventListener
+  componentWillUnmount() {
+    window.removeEventListener(
+      "unhandledrejection",
+      this.catchAllUnhandledErrors
+    );
   }
 
   render() {
@@ -37,22 +57,28 @@ class App extends Component {
         <HeaderContainer />
         <Navbar />
         <div className="app-wrapper-content">
-          <Route
-            path="/profile/:userId?" //userId говорит что в url есть params{}, ? говорит что параметр не обязат.19 мин 60 видео
-            render={withSuspense(ProfileContainer)}
-          />
-          <Route //следит за url,смотрит на адресную строку
-            path="/dialogs"
-            render={withSuspense(DialogsContainer)}
-          />
+          {/*switch идет по route сверху вниз и как только попадет на нужный по запросу route он отбрасывает лижнее и отрисовывает то что нужно  */}
+          <Switch>
+            <Route path="/" exact>
+              <Redirect to="/profile" />
+            </Route>
 
-          <Route path="/users" render={() => <UsersContainer />} />
+            <Route
+              path="/profile/:userId?" //userId говорит что в url есть params{}, ? говорит что параметр не обязат.19 мин 60 видео
+              render={withSuspense(ProfileContainer)}
+            />
+            <Route //следит за url,смотрит на адресную строку
+              path="/dialogs"
+              render={withSuspense(DialogsContainer)}
+            />
+            <Route path="/users" render={() => <UsersContainer />} />
+            <Route path="/login" render={() => <LoginPage />} />
 
-          <Route path="/login" render={() => <LoginPage />} />
-
-          <Route path="/news" render={() => <News />} />
-          <Route path="/video" render={() => <Video />} />
-          <Route path="/settings" render={() => <Settings />} />
+            <Route path="/news" render={() => <News />} />
+            <Route path="/video" render={() => <Video />} />
+            <Route path="/settings" render={() => <Settings />} />
+            <Route path="*" render={() => <div>404 NOT FOUND</div>} />
+          </Switch>
         </div>
       </div>
     );
@@ -64,6 +90,7 @@ const mapStateToProps = (state) => ({
   //то есть мы будем возвращать всю разметку только тогда когда мы проинициализировались
 });
 
+//compose принимает hoc
 let AppContainer = compose(
   withRouter,
   connect(mapStateToProps, { initializeApp })
@@ -74,11 +101,11 @@ let AppContainer = compose(
 //все оборачивание которое происходило в index.js переносим сюда
 const ReactApp = (props) => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Provider store={store}>
         <AppContainer />
       </Provider>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
