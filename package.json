@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://vagabund3.github.io/React-project",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
